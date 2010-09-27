@@ -61,7 +61,7 @@ function setSendAnalytics (value) {
 
 function logout() {
     chrome.tabs.create( {
-        'url': 'https://www.google.com/accounts/b/0/RevokeAuthSubAccess?authsub_tokens=' + encodeURIComponent(oauth.getToken()) + '&authsub_target_label=moodkncdncfpjbcaofoibalkmchnnfja&authsub_scope_label=Google+Docs'
+        'url': 'https://www.google.com/accounts/b/0/RevokeAuthSubAccess?authsub_tokens=' + encodeURIComponent(oauth.getToken()) + '&authsub_target_label=oamfgnlpfakglicippbmceflfnicfhon&authsub_scope_label=Google+Docs'
     });
     oauth.clearTokens();
 };
