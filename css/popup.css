@@ -1,0 +1,38 @@
+body
+{
+    background-image: url(/img/bg.gif);
+    min-width: 400px;
+}
+
+div
+{
+    margin: 10px;
+}
+
+button
+{
+    font-size: 20px;
+    line-height: 30px;
+}
+
+.hidden
+{
+    display: none;
+}
+
+.vcenter
+{
+    vertical-align: middle;
+}
+
+.center
+{
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+    width: 90%;
+}
+.left
+{
+    text-align: left;
+}

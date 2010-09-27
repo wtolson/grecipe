@@ -1,0 +1,30 @@
+body
+{
+    background-image: url(/img/bg.gif);
+}
+
+h3
+{
+    margin-bottom: 10px;
+}
+
+#content
+{
+    width: 500px;
+    border: #5fb829 solid 10px;
+    border-radius: 10px;
+    background: white;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    padding: 10px;
+}
+
+#logo
+{
+    float:right;
+    background-image:url(/img/grecipe-128.png);
+    width:128px;
+    height:128px;
+}

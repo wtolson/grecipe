@@ -1,0 +1,15 @@
+﻿gRecipe Change log
+William Olson
+ 
+* 1.0  9/24/2010
+ - Initial Release
+ 
+* 1.1  9/24/2010
+ - Minor bug fixes
+ - Now gets full summary text from epicurious
+ - Added usage statistics
+ 
+* 1.2 9/26/2010
+ - General beautification
+ - Added automatic open and usage statistics options
+ - Added link to document from popup
