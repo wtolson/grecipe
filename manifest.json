@@ -17,7 +17,9 @@
       "js": [ "lib/jquery-1.4.2.min.js", "js/epicurious.js" ],
       "matches": [ "http://www.epicurious.com/*" ] } , {
       "js": [ "lib/jquery-1.4.2.min.js", "js/food.js" ],
-      "matches": [ "http://www.food.com/*" ]
+      "matches": [ "http://www.food.com/*" ] } , {
+      "js": [ "lib/jquery-1.4.2.min.js", "js/foodandwine.js" ],
+      "matches": [ "http://www.foodandwine.com/*" ]
    } ],
   "permissions": [
     "tabs",
