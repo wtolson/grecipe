@@ -25,13 +25,13 @@ chrome.extension.onRequest.addListener(
     function(request, sender, sendResponse) {
         if ( request.hasRecipe ) {
             chrome.pageAction.show(sender.tab.id);
-            recipes[sender.tab.id + ''] = request.recipe;
+            setRecipe(sender.tab.id, request.recipe);
         }
 });
 
 chrome.tabs.onRemoved.addListener(
     function(tabId) {
-        recipes[tabId + ''] = '';
+        setRecipe(tabId, null);
     }
 );
 
@@ -57,6 +57,14 @@ function setOpenOnSave (value) {
 
 function setSendAnalytics (value) {
     localStorage.sendAnalytics = value;
+}
+
+function setRecipe(id, recipe) {
+    recipes['tab:' + tabId] = recipe;
+}
+
+function getRecipe(id) {
+    return recipes['tab:' + tabId];
 }
 
 function logout() {
