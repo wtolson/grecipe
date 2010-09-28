@@ -13,3 +13,11 @@ William Olson
  - General beautification
  - Added automatic open and usage statistics options
  - Added link to document from popup
+
+* 1.3 9/26/2010
+ - Small bug fixes
+
+* 1.4 9/27/2010
+ - Fixed false positives on epicurious
+ - Style tweaking on options page
+ - Made option discriptions clearer

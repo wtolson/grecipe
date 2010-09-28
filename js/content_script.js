@@ -41,9 +41,7 @@ function getInstructions() {
     return instructions.html();
 }
 
-var body_class = $("body").attr("class");
-
-if (body_class == 'recipesmenus') {    
+if ($('#recipe_detail_module').size() != 0) {    
     chrome.extension.sendRequest({
         hasRecipe: true,
         recipe: {
