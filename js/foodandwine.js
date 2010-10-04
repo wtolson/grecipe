@@ -1,16 +1,30 @@
+function blank(str) {
+    return (str == null || /^\s+$/.test(str));
+}
+
+
 function getTitle() {
     return $('h2', $('#recipe1')).first().text();
 }
 
 function getSummary() {
-    var viaText= 'Via <a href="http://www.foodandwine.com/">Food & Wine</a>';
+    var summary = '<div>Via <a href="http://www.foodandwine.com/">Food & Wine</a></div>';
     
-    var recipeIntroText =  $('#teaser-border').html();
+    var recipeIntroText =  $('#teaser-border');
     var wineText = $('#recipeWines').clone();
     $('h2', wineText).remove();
     $('img', wineText).remove();
     
-    return '<div>' + viaText + '</div><br /><div>' + recipeIntroText + '</div><br /><div>' + wineText.html() + '</div>';
+    if (!blank(recipeIntroText.text())) {
+        summary = summary + '<br /><div>' + recipeIntroText.html() + '</div>';
+    } else {
+    }
+    
+    if (!blank(wineText.text())) {
+        summary = summary + '<br /><div>' + wineText.html() + '</div>';
+    }
+    
+    return summary;
 }
 
 function getIngredients() {

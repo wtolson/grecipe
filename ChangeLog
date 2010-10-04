@@ -27,4 +27,4 @@ William Olson
 * 1.5 10/4/2010
  - Created common content script
  - Added support for allrecipes.com
- 
+ - Bug fix for blank summary on foodandwine.com
