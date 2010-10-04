@@ -23,3 +23,8 @@ William Olson
  - Made option discriptions clearer
  - Added support for food.com
  - Added support for foodandwine.com
+
+* 1.5 10/4/2010
+ - Created common content script
+ - Added support for allrecipes.com
+ 

@@ -1,6 +1,6 @@
 {
   "name": "gRecipes",
-  "version": "1.4",
+  "version": "1.5",
   "icons": {
     "48": "img/grecipe-48.png",
     "128": "img/grecipe-128.png"
@@ -14,12 +14,14 @@
     "default_popup": "popup.html"
   },
   "content_scripts": [ {
-      "js": [ "lib/jquery-1.4.2.min.js", "js/epicurious.js" ],
+      "js": [ "lib/jquery-1.4.2.min.js", "js/epicurious.js", "js/content_script.js" ],
       "matches": [ "http://www.epicurious.com/*" ] } , {
-      "js": [ "lib/jquery-1.4.2.min.js", "js/food.js" ],
+      "js": [ "lib/jquery-1.4.2.min.js", "js/food.js", "js/content_script.js" ],
       "matches": [ "http://www.food.com/*" ] } , {
-      "js": [ "lib/jquery-1.4.2.min.js", "js/foodandwine.js" ],
-      "matches": [ "http://www.foodandwine.com/*" ]
+      "js": [ "lib/jquery-1.4.2.min.js", "js/foodandwine.js", "js/content_script.js" ],
+      "matches": [ "http://www.foodandwine.com/*" ] }, {
+      "js": [ "lib/jquery-1.4.2.min.js", "js/allrecipes.js", "js/content_script.js" ],
+      "matches": [ "http://allrecipes.com/*" ]
    } ],
   "permissions": [
     "tabs",

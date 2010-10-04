@@ -33,17 +33,6 @@ function getInstructions() {
     return $('ol', instructions).html();
 }
 
-if ($('h2.fn').size() != 0) {    
-    chrome.extension.sendRequest({
-        hasRecipe: true,
-        recipe: {
-            title: getTitle(),
-            summary: getSummary(),
-            ingredients: getIngredients(),
-            instructions: getInstructions()
-        }
-    });
-} else {
-    chrome.extension.sendRequest({ hasRecipe: false });
+function pageHasRecipe() {
+    return ($('h2.fn').size() != 0);
 }
-

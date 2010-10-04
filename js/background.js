@@ -60,11 +60,11 @@ function setSendAnalytics (value) {
 }
 
 function setRecipe(id, recipe) {
-    recipes['tab:' + tabId] = recipe;
+    recipes['tab:' + id] = recipe;
 }
 
 function getRecipe(id) {
-    return recipes['tab:' + tabId];
+    return recipes['tab:' + id];
 }
 
 function logout() {
