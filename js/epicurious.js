@@ -12,7 +12,7 @@ function getSummary() {
     if(typeof recipeIntroText == "undefined" || recipeIntroText instanceof HTMLDivElement) {
         var recipeIntroText =  $('#truncatedText').html();
         if (blank(recipeIntroText)) {
-            return viaText;
+            return '<div>' + viaText + '</div>';
         } else {
             return '<div>' + viaText + '</div><br /><div>' + recipeIntroText + '</div>';
         }

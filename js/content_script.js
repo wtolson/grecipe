@@ -1,14 +1,17 @@
-if (pageHasRecipe()) {
-    chrome.extension.sendRequest({
-        hasRecipe: true,
-        recipe: {
-            title: getTitle(),
-            summary: getSummary(),
-            ingredients: getIngredients(),
-            instructions: getInstructions()
-        }
-    });
-} else {
-    chrome.extension.sendRequest({ hasRecipe: false });
-}
-
+var port = chrome.extension.connect({name: "grecipe"});
+port.postMessage({type: "host", host: location.host});
+port.onMessage.addListener(function(msg) {
+	if ( msg.type == "getrecipe" ) {
+		if (pageHasRecipe()) {
+			port.postMessage({
+				type: "recipe",
+				recipe: {
+					title: getTitle(),
+					summary: getSummary(),
+					ingredients: getIngredients(),
+					instructions: getInstructions()
+				}
+			});
+		}
+	}
+});
