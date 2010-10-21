@@ -2,10 +2,11 @@ var DOCLIST_SCOPE = 'https://docs.google.com/feeds';
 var DOCLIST_FEED = DOCLIST_SCOPE + '/default/private/full/';
 var recipes = [];
 var websites = {
-	"www.epicurious.com": "js/epicurious.js",
-	"www.food.com": "js/food.js",
-	"www.foodandwine.com": "js/foodandwine.js",
-	"allrecipes.com": "js/foodandwine.js"
+	"www.epicurious.com":   "js/epicurious.js",
+	"www.food.com":         "js/food.js",
+	"www.foodandwine.com":  "js/foodandwine.js",
+	"allrecipes.com":       "js/allrecipes.js",
+	"www.bbc.co.uk":        "js/bbcfood.js"
 };
 	
 

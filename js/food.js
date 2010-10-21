@@ -3,14 +3,13 @@ function getTitle() {
 }
 
 function getSummary() {
-    var viaText= 'Via <a href="http://www.food.com/">food.com</a>';
+    var summary = '<div>Via <a href="http://www.food.com/">food.com</a></div>';
     
     var recipeIntroText =  $('.summary').html();
-    if (recipeIntroText == null) {
-        return viaText;
-    } else {
-        return '<div>' + viaText + '</div><br /><div>' + recipeIntroText + '</div>';
+    if (recipeIntroText != null) {
+        return summary += '<br /><div>' + recipeIntroText + '</div>';
     }
+    return summary;
 }
 
 function getIngredients() {
