@@ -24,6 +24,7 @@ port.onMessage.addListener(function(msg) {
 
 // Yeah namespaces!
 var util = {};
+GR_DEBUG = false;
 
 util.debug = function (msg) {
 	if (GR_DEBUG) {
