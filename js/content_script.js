@@ -4,10 +4,10 @@ port.onMessage.addListener(function(msg) {
 	if ( msg.type == "getrecipe" ) {
 		if (pageHasRecipe()) {
 			
-			grdebug( 'Title: ' + getTitle() );
-			grdebug( 'Summary:\n' + getSummary() );
-			grdebug( 'Ingredients:\n' + getIngredients() );
-			grdebug( 'Instructions:\n' + getInstructions() );
+			util.debug( 'Title: ' + getTitle() );
+			util.debug( 'Summary:\n' + getSummary() );
+			util.debug( 'Ingredients:\n' + getIngredients() );
+			util.debug( 'Instructions:\n' + getInstructions() );
 			
 			port.postMessage({
 				type: "recipe",
@@ -22,13 +22,15 @@ port.onMessage.addListener(function(msg) {
 	}
 });
 
+// Yeah namespaces!
+var util = {};
 
-function grdebug(msg) {
+util.debug = function (msg) {
 	if (GR_DEBUG) {
 		console.log('gR Debug: ' + msg)
 	}
-}
+};
 
-function blank(str) {
+util.blank = function (str) {
     return (str == null || /^\s+$/.test(str) || str == "");
-}
+};

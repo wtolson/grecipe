@@ -9,7 +9,7 @@ function getSummary() {
 function getIngredients() {
 	ingredients = $('#stages', $('#ingredients')).clone();
 	$('.stage-title', ingredients).each( function() {
-		if ( blank($(this).text()) ) {
+		if ( util.blank($(this).text()) ) {
 			$(this).remove();
 		} else {
 			$(this).replaceWith($('<h3>' + $(this).text() + '</h3>'));
