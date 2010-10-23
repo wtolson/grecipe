@@ -1,5 +1,3 @@
-GR_DEBUG = true;
-
 function getTitle() {
     return $('div.headers', $('div.recipe')).text().trim();
 }
