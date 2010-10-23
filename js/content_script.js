@@ -32,6 +32,10 @@ util.debug = function (msg) {
 	}
 };
 
-util.blank = function (str) {
-    return (str == null || /^\s+$/.test(str) || str == "");
+String.prototype.trim = function() {
+	return this.replace(/^\s+|\s+$/g,"");
+};
+
+String.prototype.blank = function () {
+    return (this == null || /^\s+$/.test(this) || this == "");
 };

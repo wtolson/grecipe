@@ -6,7 +6,8 @@ var websites = {
 	"www.food.com":         "js/food.js",
 	"www.foodandwine.com":  "js/foodandwine.js",
 	"allrecipes.com":       "js/allrecipes.js",
-	"www.bbc.co.uk":        "js/bbcfood.js"
+	"www.bbc.co.uk":        "js/bbcfood.js",
+	"www.gourmet.com":		"js/gourmet.js"
 };
 	
 

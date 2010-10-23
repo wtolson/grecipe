@@ -1,5 +1,5 @@
 function getTitle() {
-    return $('.fn').text();
+    return $('.fn').text().trim();
 }
 
 function getSummary() {
@@ -7,7 +7,7 @@ function getSummary() {
     eval($('#recipeIntroText').children('script').text());
     if(typeof recipeIntroText == "undefined" || recipeIntroText instanceof HTMLDivElement) {
         var recipeIntroText =  $('#truncatedText').html();
-        if (util.blank(recipeIntroText)) {
+        if (recipeIntroText.blank()) {
             return '<div>' + viaText + '</div>';
         } else {
             return '<div>' + viaText + '</div><br /><div>' + recipeIntroText + '</div>';

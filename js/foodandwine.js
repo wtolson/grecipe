@@ -1,5 +1,5 @@
 function getTitle() {
-    return $('h2', $('#recipe1')).first().text();
+    return $('h2', $('#recipe1')).first().text().trim();
 }
 
 function getSummary() {
@@ -10,12 +10,12 @@ function getSummary() {
     $('h2', wineText).remove();
     $('img', wineText).remove();
     
-    if (!util.blank(recipeIntroText.text())) {
+    if (!recipeIntroText.text().blank()) {
         summary = summary + '<br /><div>' + recipeIntroText.html() + '</div>';
     } else {
     }
     
-    if (!util.blank(wineText.text())) {
+    if (!wineText.text().blank()) {
         summary = summary + '<br /><div>' + wineText.html() + '</div>';
     }
     

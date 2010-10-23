@@ -1,5 +1,5 @@
 function getTitle() {
-    return $('h1', $('#column-1')).first().text();
+    return $('h1', $('#column-1')).first().text().trim();
 }
 
 function getSummary() {
@@ -9,7 +9,7 @@ function getSummary() {
 function getIngredients() {
 	ingredients = $('#stages', $('#ingredients')).clone();
 	$('.stage-title', ingredients).each( function() {
-		if ( util.blank($(this).text()) ) {
+		if ( $(this).text().blank() ) {
 			$(this).remove();
 		} else {
 			$(this).replaceWith($('<h3>' + $(this).text() + '</h3>'));

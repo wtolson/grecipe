@@ -1,5 +1,5 @@
 function getTitle() {
-    return $('#itemTitle').text();
+    return $('#itemTitle').text().trim();
 }
 
 function getSummary() {
