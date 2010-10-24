@@ -29,5 +29,8 @@ William Olson
  - Added support for allrecipes.com
  - Bug fix for blank summary on foodandwine.com
 
-* 1.6 10/17/2010
+* 1.6 10/24/2010
  -Restructured content scripts.
+ -Added support for BBC Food
+ -Added support for Gourmet Magazine
+ -Added support for BBC Good Food
