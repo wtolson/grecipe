@@ -3,7 +3,7 @@ function getTitle() {
 }
 
 function getSummary() {
-    var summary = '<div>Via <a href="http://www.gourmet.com/">gourmet.com</a></div>';
+    var summary = 'Via <a href="'+document.URL+'">gourmet.com</a><br>';
     var recipeIntroText =  $("div.text", $('div.body', $('div.recipe'))).children().html();
     if ( !recipeIntroText.blank() ) {
         return summary += '<br /><div>' + recipeIntroText + '</div>';

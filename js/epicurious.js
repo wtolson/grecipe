@@ -3,7 +3,8 @@ function getTitle() {
 }
 
 function getSummary() {
-    var viaText= 'Via <a href="http://www.epicurious.com/">epicurious.com</a>';
+    var viaText= 'Via <a href="'+document.URL+'">epicurious.com</a><br>';
+    
     eval($('#recipeIntroText').children('script').text());
     if(typeof recipeIntroText == "undefined" || recipeIntroText instanceof HTMLDivElement) {
         var recipeIntroText =  $('#truncatedText').html();
