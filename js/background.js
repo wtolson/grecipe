@@ -8,7 +8,8 @@ var websites = {
 	"allrecipes.com":       "js/allrecipes.js",
 	"www.bbc.co.uk":        "js/bbcfood.js",
 	"www.gourmet.com":		"js/gourmet.js",
-	"www.bbcgoodfood.com":	"js/bbcgoodfood.js"
+	"www.bbcgoodfood.com":	"js/bbcgoodfood.js",
+	"www.foodnetwork.com":	"js/foodnetwork.js"
 };
 	
 
