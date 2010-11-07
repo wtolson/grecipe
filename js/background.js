@@ -9,7 +9,8 @@ var websites = {
 	"www.bbc.co.uk":        "js/bbcfood.js",
 	"www.gourmet.com":		"js/gourmet.js",
 	"www.bbcgoodfood.com":	"js/bbcgoodfood.js",
-	"www.foodnetwork.com":	"js/foodnetwork.js"
+	"www.foodnetwork.com":	"js/foodnetwork.js",
+	"www.chow.com":			"js/chow.js"
 };
 	
 
