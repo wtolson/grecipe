@@ -3,6 +3,10 @@ var gdocs = {};
 
 var bgPage = chrome.extension.getBackgroundPage();
 
+String.prototype.blank = function () {
+    return (this == null || /^\s+$/.test(this) || this == "");
+};
+
 /**
  * A helper for constructing the raw Atom xml send in the body of an HTTP post.
  * @param {XMLHttpRequest} xhr The xhr request that failed.
@@ -84,7 +88,26 @@ var handleSuccess = function(resp, xhr) {
 var createDoc = function(tab) {
     recipe = bgPage.getRecipe(tab.id);
   
-    var content = '<html><head><style type="text/css">body{font-size:11pt;font-family:Arial;line-height:115%}h1{padding-top:14.0pt;padding-bottom:4.0pt;font-size:24pt;font-weight:bold}h2{padding-top:14.0pt;padding-bottom:0.0pt;font-size:18pt;font-weight:bold}h3{padding-top:0.0pt;padding-bottom:-8.0pt;font-size:14pt;font-weight:bold}ol{list-style-type:disc}li{margin-left:6.0pt}</style></head><body><h1>' + recipe.title + '</h1>' + recipe.summary + '<h2>Ingredients</h2>' + recipe.ingredients + '<h2>Instructions</h2>' + recipe.instructions + '</body></html>';
+    var content = [
+		'<html>',
+			'<head>', 
+				'<style type="text/css">',
+					'body{font-size:11pt;font-family:Arial;line-height:115%}',
+					'h1{padding-top:14.0pt;padding-bottom:4.0pt;font-size:24pt;font-weight:bold}',
+					'h2{padding-top:14.0pt;padding-bottom:0.0pt;font-size:18pt;font-weight:bold}',
+					'h3{padding-top:0.0pt;padding-bottom:-8.0pt;font-size:14pt;font-weight:bold}',
+					'ol{list-style-type:disc}',
+					'li{margin-left:6.0pt}',
+				'</style>',
+			'</head>',
+			'<body>'];
+	content.push( '<h1>' + recipe.title + '</h1>');
+	content.push( recipe.summary );
+	if ( !recipe.ingredients.blank() )
+		content.push( '<h2>Ingredients</h2>' + recipe.ingredients );
+	if ( !recipe.instructions.blank() )
+		content.push( '<h2>Instructions</h2>' + recipe.instructions );
+	content.push( '</body></html>' );
   
 
     var params = {
@@ -94,7 +117,7 @@ var createDoc = function(tab) {
             'Content-Type': 'multipart/related; boundary=END_OF_PART',
         },
         'parameters': {'alt': 'json'},
-        'body': gdocs.constructContentBody_(recipe.title, 'document', content,
+        'body': gdocs.constructContentBody_(recipe.title, 'document', content.join(''),
                                             'text/html', false)
     };
 
