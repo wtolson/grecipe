@@ -1,63 +1,46 @@
+/************************
+ * 
+ * By Jim
+ * 
+ ***********************/
+GR_DEBUG = true;
+
 function getTitle() {
     return document.title;
 }
 
 function getSummary() {
     var viaText= 'Via <a href="'+document.URL+'">thepioneerwoman.com</a><br>';
-    return '<div>' + viaText + '</div><br /><div>' +  '</div>';
+    return '<div>' + viaText + '</div>';
 }
 
-function getIngredients() {
-    var ingredients="";
-    var divs = $('div').clone();
-    for(var i = 0; i < divs.length; i++)
-    {
-      // check if this div has shortcode class
-      if (divs[i].getAttribute('class') === 'shortcode')
-      {
-          var temp=divs[i]
-          $('p',temp).remove('.select-a-size');
-          $('img', temp).remove();
-          $('label', temp).remove();
-          $('h2', temp).remove();
-        //  $('p', temp).after('<br />');
-          $('.shortcode-box', temp).remove();
-          $('h4', temp).remove();
-          $('p', temp).remove();
-          ingredients = new XMLSerializer().serializeToString(temp);
-      }
-    }
-    return ingredients.toString();
+function getIngredients() {	
+    var ingredients = $('div.shortcode').clone();
+	$('p',ingredients).remove('.select-a-size');
+	$('img', ingredients).remove();
+	$('label', ingredients).remove();
+	$('h2', ingredients).remove();
+	//  $('p', ingredients).after('<br />');
+	$('.shortcode-box', ingredients).remove();
+	$('h4', ingredients).remove();
+	$('p', ingredients).remove();
+          
+    return ingredients.html();
 }
 
 function getInstructions() {
-    var instructions="";
-    var divs = $('div').clone();
-
-    for(var i = 0; i < divs.length; i++)
-    {
-      // check if this div has shortcode class
-      if (divs[i].getAttribute('class') === 'shortcode')
-      {
- 
-          var temp=divs[i]
-          $('p',temp).remove('.select-a-size');
-          $('img', temp).remove();
-          $('label', temp).remove();
-          $('.shortcode-box', temp).remove();
-          $('ul', temp).remove();           
-          $('h2', temp).remove();
-          $('h4', temp).remove();
-          $('p', temp).after('<br />');           
-          instructions = new XMLSerializer().serializeToString(temp);
-      }
-    }
-    return instructions.toString();
+    var instructions = $('div.shortcode').clone();
+	$('p',instructions).remove('.select-a-size');
+	$('img', instructions).remove();
+	$('label', instructions).remove();
+	$('.shortcode-box', instructions).remove();
+	$('ul', instructions).remove();           
+	$('h2', instructions).remove();
+	$('h4', instructions).remove();
+	$('p', instructions).after('<br />');
+    return instructions.html();
 }
 
 function pageHasRecipe () {
-    if($("div").find(".shortcode").length == 1)
-       return 1;
-    return 0;
-    
+	return ($('div.shortcode').size() == 1);   
 }
