@@ -5,7 +5,7 @@ function getTitle() {
 }
 
 function getSummary() {
-	var ans = "<div>Via <a href='http://www.chow.com/'>CHOW</a></div>";
+	var ans = "<div>Via <a href='"+document.URL+"'>CHOW</a></div>";
 	
 	if($('#intro_full').size() != 0) {
 		var intro = $('#intro_full');

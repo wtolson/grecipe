@@ -5,7 +5,7 @@ function getTitle() {
 }
 
 function getSummary() {
-	return "<div>Via <a href='http://www.foodnetwork.com/'>Food Network</a></div>";
+	return "<div>Via <a href='"+document.URL+"'>Food Network</a></div>";
 }
 
 function getIngredients() {
