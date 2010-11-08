@@ -8,7 +8,9 @@ var websites = {
 	"allrecipes.com":       "js/allrecipes.js",
 	"www.bbc.co.uk":        "js/bbcfood.js",
 	"www.gourmet.com":		"js/gourmet.js",
-	"www.bbcgoodfood.com":	"js/bbcgoodfood.js"
+	"www.bbcgoodfood.com":	"js/bbcgoodfood.js",
+	"www.foodnetwork.com":	"js/foodnetwork.js",
+	"www.chow.com":			"js/chow.js"
 };
 	
 
@@ -16,6 +18,9 @@ if(typeof localStorage.openOnSave == "undefined") {
     localStorage.openOnSave = false;
 }
 
+if(typeof localStorage["sendAnalytics"] == "undefined") {
+    localStorage.sendAnalytics = true;
+}
 
 var oauth = ChromeExOAuth.initBackgroundPage({
     'request_url': 'https://www.google.com/accounts/OAuthGetRequestToken',
@@ -63,11 +68,17 @@ function shouldOpenOnSave () {
     return toBool(localStorage.openOnSave);
 }
 
+function shouldSendAnalytics () {
+    return toBool(localStorage.sendAnalytics);
+}
 
 function setOpenOnSave (value) {
     localStorage.openOnSave = value;
 }
 
+function setSendAnalytics (value) {
+    localStorage.sendAnalytics = value;
+}
 
 function setRecipe(id, recipe) {
     recipes['tab:' + id] = recipe;
