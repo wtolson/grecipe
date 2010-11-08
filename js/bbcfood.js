@@ -3,7 +3,7 @@ function getTitle() {
 }
 
 function getSummary() {
-	return "<div>Via <a href='http://www.bbc.co.uk/food/'>www.bbc.co.uk/food/</a></div>";
+	return 'Via <a href="'+document.URL+'">bbcfood.com</a><br>';
 }
 
 function getIngredients() {

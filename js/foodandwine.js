@@ -3,7 +3,7 @@ function getTitle() {
 }
 
 function getSummary() {
-    var summary = '<div>Via <a href="http://www.foodandwine.com/">Food & Wine</a></div>';
+    var summary = 'Via <a href="'+document.URL+'">Food and Wine</a><br>';
     
     var recipeIntroText =  $('#teaser-border');
     var wineText = $('#recipeWines').clone();

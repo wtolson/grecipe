@@ -3,7 +3,7 @@ function getTitle() {
 }
 
 function getSummary() {
-	return "<div>Via <a href='http://www.bbcgoodfood.com/'>BBC Good Food</a></div><br><div>" + $(".summary").html().trim() + "</div>";
+	return 'Via <a href="'+document.URL+'">BBC Good Food</a><br><div>' + $(".summary").html().trim() + "</div>";
 }
 
 function getIngredients() {

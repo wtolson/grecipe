@@ -3,7 +3,7 @@ function getTitle() {
 }
 
 function getSummary() {
-    var viaText= 'Via <a href="http://www.allrecipes.com/">allrecipes.com</a>';
+    var viaText= 'Via <a href="'+document.URL+'">allrecipes.com</a><br>';
     
     var summary = $('.author-name').parent().clone();
     
