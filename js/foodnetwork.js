@@ -30,6 +30,7 @@ function getSummary() {
 
 function getIngredients() {
 	ingredients = $('div.body-text').clone();
+	$('span',ingredients).remove('.nocoupons');
 	$('h2', ingredients).each( function() {
 			if ( $(this).text() == 'Ingredients' || $(this).text() == 'Directions') {
 				$(this).remove();
