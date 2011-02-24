@@ -20,7 +20,7 @@
 
 var DOCLIST_SCOPE = 'https://docs.google.com/feeds';
 var DOCLIST_FEED = DOCLIST_SCOPE + '/default/private/full/';
-var recipes = [];
+var recipes = {};
 var websites = {
 	"www.epicurious.com":   "js/epicurious.js",
 	"www.food.com":         "js/food.js",
@@ -98,11 +98,11 @@ function setSendAnalytics (value) {
 }
 
 function setRecipe(id, recipe) {
-    recipes['tab:' + id] = recipe;
+    recipes[id] = recipe;
 }
 
 function getRecipe(id) {
-    return recipes['tab:' + id];
+    return recipes[id];
 }
 
 function testUrl(test, url) {
