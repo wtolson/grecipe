@@ -78,11 +78,7 @@ chrome.tabs.onRemoved.addListener(
 );
 
 function toBool(str) {
-    if (str == 'false') {
-        return false;
-    } else {
-        return str;
-    }    
+  return (str == 'false') ? false : str;
 };
 
 function shouldOpenOnSave () {
@@ -107,6 +103,11 @@ function setRecipe(id, recipe) {
 
 function getRecipe(id) {
     return recipes['tab:' + id];
+}
+
+function testUrl(test, url) {
+  var specials = new RegExp("[.+?|()\\[\\]{}\\\\]", "g");
+  return RegExp("^" + test.replace(specials, "\\$&").replace("*", ".*") + "$").test(url);
 }
 
 function logout() {

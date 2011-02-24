@@ -17,24 +17,32 @@
  * 
  **********************************************************************/
 
+(function(window, $, grecipe, undefined) {
 
-var bgPage = chrome.extension.getBackgroundPage();
-
-function logout() {
-    bgPage.logout();
-    $('#revoke').get(0).disabled = true;
+function logout(event) {
+  grecipe.logout();
+  event.target.disabled = true;
 }
 
-function setOpenOnSave() {
-    bgPage.setOpenOnSave($('#openonsave').get(0).checked);
+function setOpenOnSave(event) {
+  grecipe.setOpenOnSave(event.target.checked);
 }
 
-function setSendAnalytics() {
-    bgPage.setSendAnalytics($('#analytics').get(0).checked);
+function setSendAnalytics(event) {
+  grecipe.setSendAnalytics(event.target.checked);
 }
 
 function initUI() {
-    $('#revoke').get(0).disabled = !bgPage.oauth.hasToken();
-    $('#openonsave').get(0).checked = bgPage.shouldOpenOnSave();
-    $('#analytics').get(0).checked = bgPage.shouldSendAnalytics();
+  $('#revoke').get(0).disabled = !grecipe.oauth.hasToken();
+  $('#openonsave').get(0).checked = grecipe.shouldOpenOnSave();
+  $('#analytics').get(0).checked = grecipe.shouldSendAnalytics();
 }
+
+$(function() {
+  initUI();
+  $("#revokeButton").click(logout);
+  $("#openonsaveOption").click(setOpenOnSave);
+  $("#analyticsOption").click(logout);
+});
+
+})(window, window.jQuery, window.chrome.extension.getBackgroundPage().grecipe);

@@ -1,51 +1,50 @@
-<!DOCTYPE html>
-<!--
- * Copyright (c) 2010 The Chromium Authors. All rights reserved.  Use of this
- * source code is governed by a BSD-style license that can be found in the
- * LICENSE file.
- *
- * Author: Eric Bidelman <ericbidelman@chromium.org>
--->
-<html>
-    <head>
-        <link rel="shortcut icon" href="favicon.ico">
-        <title>gRecipes Options</title>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>gRecipes Options</title>
     
-        <link rel="stylesheet" type="text/css" href="css/boilerplate.css" />
-        <link rel="stylesheet" type="text/css" href="css/options.css" />
-    
-        <script type="text/javascript" src="lib/jquery-1.4.2.min.js"></script>
-        <script type="text/javascript" src="js/options.js"></script>
+    <link rel="shortcut icon" href="favicon.ico">
+    <link rel="stylesheet" type="text/css" href="css/options.css" />
   </head>
   
-    <body onload="initUI();">
-        <div id="content">
-            <span id="logo"></span>
-            <h1>gRecipes Options</h1>
-            <br />
-            
-            <h3>Google Docs Permissions</h3>
-            <p><button id="revoke" onclick="logout();">Revoke Permissions</button></p>
-            <p>Clicking this button will revoke gRecipes access to your Google Docs.  This can also be done from your <a title="Google Settings" href="https://www.google.com/accounts/b/0/IssuedAuthSubTokens?hl=en">Google Settings</a> page.  You will be unable to save recipes until you grant gRecipes access again.</p>
-            
-            <h3>Automatic Open</h3>
-            <p><input id="openonsave" type="checkbox" onclick="setOpenOnSave();" /> Automatically open a new recipe when created.</p>
-            
-            <h3>Usage Statistics</h3>
-            <p><input id="analytics" type="checkbox" onclick="setSendAnalytics();" /> Send Anonymous Usage Statistics. </p>
-            
-            <hr>
-            
-            <h3>Credits and License</h3>
-            
-            <h4>Author</h4>
-            <p>William Trevor Olson <br />
-            <a title="Hey Trevor" href="http://heytrevor.com/">heytrevor.com</a><br />
-            <a title="My Twitter" href="http://twitter.com/ZombieFeynman">@ZombieFeynman</a></p>
-            
-            <h4>License</h4>
-            <p>gRecipes is open source under the <a title="GPLv3" href="http://www.gnu.org/licenses/gpl-3.0.html">GPLv3</a>. <br />
-            <a title="GPLv3" href="http://www.gnu.org/licenses/gpl-3.0.html"><img src="http://www.gnu.org/graphics/gplv3-88x31.png"/></a></p>
-        </div>
-    </body>
+  <body>
+    <div id="content">
+      <span id="logo"></span>
+      <h1>gRecipes Options</h1>
+      
+      <h3>Google Docs Permissions</h3>
+      <p><button id="revokeButton">Revoke Permissions</button></p>
+      <p>Clicking this button will revoke gRecipes access to your Google
+      Docs.  This can also be done from your <a title="Google Settings"
+      href="https://www.google.com/accounts/b/0/IssuedAuthSubTokens?hl=en">
+      Google Settings</a> page.  You will be unable to save recipes
+      until you grant gRecipes access again.</p>
+      
+      <h3>Automatic Open</h3>
+      <p><input id="openonsaveOption" type="checkbox">
+      Automatically open a new recipe when created.</p>
+      
+      <h3>Usage Statistics</h3>
+      <p><input id="analyticsOption" type="checkbox">
+      Send Anonymous Usage Statistics. </p>
+      
+      <hr>
+      
+      <h3>Credits and License</h3>
+      
+      <h4>Author</h4>
+      <p>William Trevor Olson</p>
+      <p><a title="Hey Trevor" href="http://heytrevor.com/">heytrevor.com</a></p>
+      <p><a title="My Twitter" href="http://twitter.com/ZombieFeynman">@ZombieFeynman</a></p>
+      
+      <h4>License</h4>
+      <p>gRecipes is open source under the
+      <a title="GPLv3" href="http://www.gnu.org/licenses/gpl-3.0.html">GPLv3
+      <img src="http://www.gnu.org/graphics/gplv3-88x31.png"></a></p>
+    </div> <!--! end of #container -->
+    
+    <script type="text/javascript" src="lib/jquery-1.5.min.js"></script>
+    <script type="text/javascript" src="js/options.js"></script>
+  </body>
 </html>

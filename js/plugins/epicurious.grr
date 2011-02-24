@@ -18,18 +18,20 @@
  **********************************************************************/
 
 {
-	name: 'Epicurious',
-	author: 'William T. Olson',
-	version: 1.0,
-	update_url: 'http://grecipes.googlecode.com/hg/js/epicurious.grr',
-	url: 'http://www.epicurious.com/*',
+	"name": "Epicurious",
+	"author": "William T. Olson",
+	"version": 1.0,
+	"url": "http://grecipes.googlecode.com/hg/js/plugins/epicurious.grr",
+	"recipe_url: "http://www.epicurious.com/*",
 	
 	pageHasRecipe: function() {
 		return ($('#recipe_detail_module').size() != 0);
 	},
+  
 	getTitle: function() {
 		return $('.fn').text().trim();
 	},
+  
 	getSummary: function() {
 		var viaText= 'Via <a href="'+document.URL+'">epicurious.com</a><br>';
 		
@@ -45,6 +47,7 @@
 		
 		return '<div>' + viaText + '</div><br /><div>' + recipeIntroText + '</div>';
 	},
+  
 	getIngredients: function() {
 		var ingredients = $('#ingredients').clone();
 		
@@ -58,6 +61,7 @@
 		
 		return ingredients.html();
 	},
+  
 	getInstructions: function() {
 		var instructions = $('#preparation').clone();
     
@@ -67,7 +71,9 @@
 		
 		return instructions.html();
 	},
+  
 	getImg: function() {
 		return null;
-	},
+	}
+  
 }

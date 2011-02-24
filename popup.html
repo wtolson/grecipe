@@ -1,26 +1,38 @@
-<html>
-    <head>
-        <link rel="stylesheet" type="text/css" href="css/boilerplate.css" />
-        <link rel="stylesheet" type="text/css" href="css/popup.css" />
-        
-        <script type="text/javascript" src="lib/jquery-1.4.2.min.js"></script>
-        <script type="text/javascript" src="js/popup.js"></script>
-        <script type="text/javascript" src="lib/google_analytics.js"></script>
-    </head>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="css/popup.css"/>
+  </head>
 
-    <body onload="onload();">
-        <div id="message" class="hidden">
-            <h1 id="messagetxt">
-                <img class="vcenter" height="30px" src="img/loadinfo.net.gif"/> Creating your recipe...
-            </h1>
-        </div>
-        <div id="oauthbutton" class="center hidden">
-            <br />
-            <h1>gRecipes needs your Permission</h1>
-            <br />
-            <div><button onclick="authorize();">Get Permission!</button></div>
-            <br />
-            <p class="left">gRecipes needs your permission in order to save recipes to your Google Documents.  You can revoke this later in the <a title="Options" id="optionslink" href="javascript:null()">options</a> or in your <a title="Google Account Settings" id="googlesettingslink" href="javascript:null()">Google Settings</a>.</p>
-        </div>
-    </body>
+  <body>
+    <div id="container">
+    
+      <div id="message" class="hidden">
+        <h1 id="messagetxt">
+          <img class="vcenter" height="30px" src="img/loadinfo.net.gif"/>
+          Creating your recipe...
+        </h1>
+      </div> <!--! end of #message -->
+      
+      <div id="oauthbutton" class="center hidden">
+        <h1>gRecipes needs your Permission</h1>
+        
+        <button>Get Permission!</button>
+        
+        <p class="left">gRecipes needs your permission in order to
+        save recipes to your Google Documents.  You can revoke this
+        later in the <a title="Options" id="optionslink"
+        href="javascript:null()">options</a> or in your <a
+        title="Google Account Settings" id="googlesettingslink"
+        href="javascript:null()">Google Settings</a>.</p>
+      </div> <!--! end of #oauthbutton -->
+      
+    </div> <!--! end of #container -->
+    
+    <script type="text/javascript" src="js/lib/jquery-1.5.min.js"></script>
+    <script type="text/javascript" src="js/popup.js"></script>
+    <script type="text/javascript" src="lib/google_analytics.js"></script>
+    
+  </body>
 </html>

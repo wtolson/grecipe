@@ -24,7 +24,7 @@ var gdocs = {};
 var bgPage = chrome.extension.getBackgroundPage();
 
 String.prototype.blank = function () {
-    return (this == null || /^\s+$/.test(this) || this == "");
+  return (!this || /^\s*$/.test(this));
 };
 
 /**
