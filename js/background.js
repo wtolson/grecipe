@@ -77,24 +77,20 @@ chrome.tabs.onRemoved.addListener(
     }
 );
 
-function toBool(str) {
-  return (str == 'false') ? false : str;
-};
-
 function shouldOpenOnSave () {
-    return toBool(localStorage.openOnSave);
+    return JSON.parse(localStorage.openOnSave);
 }
 
 function shouldSendAnalytics () {
-    return toBool(localStorage.sendAnalytics);
+    return JSON.parse(localStorage.sendAnalytics);
 }
 
 function setOpenOnSave (value) {
-    localStorage.openOnSave = value;
+    localStorage.openOnSave = JSON.stringify(value);
 }
 
 function setSendAnalytics (value) {
-    localStorage.sendAnalytics = value;
+    localStorage.sendAnalytics = JSON.stringify(value);
 }
 
 function setRecipe(id, recipe) {
