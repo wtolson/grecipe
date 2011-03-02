@@ -19,13 +19,18 @@
 
 (function(window, chrome, undefined) {
 
-grecipe.getLib("chrome_ex_oauthsimple").then(function() {
-  grecipe.getLib("chrome_ex_oauth").then(initOAuth_);
-});
-
 var DOCLIST_SCOPE = 'https://docs.google.com/feeds',
     DOCLIST_FEED = DOCLIST_SCOPE + '/default/private/full/',
-    oauth;
+    oauth = ChromeExOAuth.initBackgroundPage({
+      'request_url': 'https://www.google.com/accounts/OAuthGetRequestToken',
+      'authorize_url': 'https://www.google.com/accounts/OAuthAuthorizeToken',
+      'access_url': 'https://www.google.com/accounts/OAuthGetAccessToken',
+      'consumer_key': 'anonymous',
+      'consumer_secret': 'anonymous',
+      'scope': DOCLIST_SCOPE,
+      'app_name': 'gRecipe',
+      'callback_page': 'lib/chrome_ex_oauth.html'
+    });
 
 var gdocs = {
   
@@ -111,19 +116,6 @@ function constructContentBody_(title, docType, body, contentType, opt_starred) {
               body, '\r\n',
               '--END_OF_PART--\r\n'].join('');
   return body;
-};
-
-function initOAuth_() {
-  oauth = ChromeExOAuth.initBackgroundPage({
-    'request_url': 'https://www.google.com/accounts/OAuthGetRequestToken',
-    'authorize_url': 'https://www.google.com/accounts/OAuthAuthorizeToken',
-    'access_url': 'https://www.google.com/accounts/OAuthGetAccessToken',
-    'consumer_key': 'anonymous',
-    'consumer_secret': 'anonymous',
-    'scope': DOCLIST_SCOPE,
-    'app_name': 'gRecipe',
-    'callback_page': 'lib/chrome_ex_oauth.html'
-  });
 };
 
 window.gdocs = gdocs;

@@ -89,26 +89,6 @@ var grecipe = {
     }
     return tabs_[tabId].deferred.promise();
   },
-
-  getLib: function(lib, short) {
-    short = (short == undefined) ? true : short;
-    var file = (short) ? "js/lib/"+lib+".js" : lib;
-    var libs = grecipe.getLib.libs;
-    if (libs == undefined) {
-      libs = grecipe.getLib.libs = {};
-    };
-    if (libs[lib] == undefined) {
-      libs[lib] = $.Deferred();
-    };
-
-    yepnope({
-      test: libs[lib].isResolved(),
-      nope: file,
-      callback: libs[lib].resolve
-    });
-
-    return libs[lib].promise();
-  },
 };
 
 function storage_(key, opt_value) {
@@ -178,13 +158,10 @@ function onRecipe_(tabId, recipe) {
   // Debugging...
   console.log("Recipe:", recipe);
   //return;
-  
-  grecipe.getLib("mustache").then(function() {
-    var template = storage_("template");
-    var doc = Mustache.to_html(template, recipe);
-    gdocs.createDoc(recipe.name, doc, function(resp) {
-      tabs_[tabId].deferred.resolveWith(null, [recipe, JSON.parse(resp)]);
-    });
+  var template = storage_("template");
+  var doc = Mustache.to_html(template, recipe);
+  gdocs.createDoc(recipe.name, doc, function(resp) {
+    tabs_[tabId].deferred.resolveWith(null, [recipe, JSON.parse(resp)]);
   });
 };
 
@@ -194,9 +171,7 @@ function onHasRecipe_(tabId, grrs) {
 };
 
 function saveGrr_(url) { 
-  $.when($.ajax(url), grecipe.getLib("sha1")).then(function(args) {
-    
-    var grr = args[0];
+  $.ajax(url).then(function(grr) {
     var id = sha1.toB64(grr);
 
     for(var i=0; i<grrIds_.length; i++) {
@@ -254,8 +229,6 @@ function setup_(manifest) {
   //localStorage.clear();
   grecipe.setDefaults();
 };
-
-grecipe.getLib("js/gdocs.js", false);
 
 var grrIds_ = storage_("grrids");
 var activeGrrs_ = storage_("activegrrs");
