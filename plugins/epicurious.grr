@@ -21,14 +21,14 @@
 	"name": "Epicurious",
 	"author": "William T. Olson",
 	"version": 1.0,
-	"url": "http://grecipes.googlecode.com/hg/js/plugins/epicurious.grr",
-	"recipe_url: "http://www.epicurious.com/*",
+	"update_url": "http://grecipes.googlecode.com/hg/js/plugins/epicurious.grr",
+	"url": "http://www.epicurious.com/*",
 	
-	pageHasRecipe: function() {
+	hasRecipe: function() {
 		return ($('#recipe_detail_module').size() != 0);
 	},
   
-	getTitle: function() {
+	getName: function() {
 		return $('.fn').text().trim();
 	},
   
@@ -71,9 +71,5 @@
 		
 		return instructions.html();
 	},
-  
-	getImg: function() {
-		return null;
-	}
   
 }

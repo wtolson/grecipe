@@ -17,32 +17,32 @@
  * 
  **********************************************************************/
 
-(function(window, $, grecipe, undefined) {
+(function(window, grecipe, $, undefined) {
 
-function logout(event) {
-  grecipe.logout();
+function on_revoke_button_click(event) {
+  grecipe.unauthorize();
   event.target.disabled = true;
-}
+};
 
-function setOpenOnSave(event) {
-  grecipe.setOpenOnSave(event.target.checked);
-}
+function on_opt_openonsave_click(event) {
+  grecipe.settings("openonsave", event.target.checked);
+};
 
-function setSendAnalytics(event) {
-  grecipe.setSendAnalytics(event.target.checked);
-}
+function on_opt_sendanalytics_click(event) {
+  grecipe.settings("sendanalytics", event.target.checked);
+};
 
 function initUI() {
-  $('#revoke').get(0).disabled = !grecipe.oauth.hasToken();
-  $('#openonsave').get(0).checked = grecipe.shouldOpenOnSave();
-  $('#analytics').get(0).checked = grecipe.shouldSendAnalytics();
-}
+  $('#revoke_button').attr("disabled", !grecipe.hasAuth());
+  $('#opt_openonsave').attr("checked", grecipe.settings("openonsave"));
+  $('#opt_sendanalytics').attr("checked", grecipe.settings("sendanalytics"));
+};
 
 $(function() {
   initUI();
-  $("#revokeButton").click(logout);
-  $("#openonsaveOption").click(setOpenOnSave);
-  $("#analyticsOption").click(logout);
+  $("#revoke_button").click(on_revoke_button_click);
+  $("#opt_openonsave").click(on_opt_openonsave_click);
+  $("#opt_sendanalytics").click(on_opt_sendanalytics_click);
 });
 
-})(window, window.jQuery, window.chrome.extension.getBackgroundPage().grecipe);
+})(window, chrome.extension.getBackgroundPage().grecipe, jQuery);

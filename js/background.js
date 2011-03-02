@@ -18,8 +18,7 @@
  **********************************************************************/
 
 
-var DOCLIST_SCOPE = 'https://docs.google.com/feeds';
-var DOCLIST_FEED = DOCLIST_SCOPE + '/default/private/full/';
+
 var recipes = {};
 var websites = {
 	"www.epicurious.com":   "js/epicurious.js",
@@ -33,26 +32,6 @@ var websites = {
 	"www.chow.com":			"js/chow.js",
 	"thepioneerwoman.com":	"js/pioneerwoman.js"
 };
-	
-
-if(typeof localStorage.openOnSave == "undefined") {
-    localStorage.openOnSave = false;
-}
-
-if(typeof localStorage["sendAnalytics"] == "undefined") {
-    localStorage.sendAnalytics = true;
-}
-
-var oauth = ChromeExOAuth.initBackgroundPage({
-    'request_url': 'https://www.google.com/accounts/OAuthGetRequestToken',
-    'authorize_url': 'https://www.google.com/accounts/OAuthAuthorizeToken',
-    'access_url': 'https://www.google.com/accounts/OAuthGetAccessToken',
-    'consumer_key': 'anonymous',
-    'consumer_secret': 'anonymous',
-    'scope': DOCLIST_SCOPE,
-    'app_name': 'gRecipe',
-    'callback_page': 'lib/chrome_ex_oauth.html'
-});
 
 chrome.extension.onConnect.addListener(function(port) {
 	console.assert(port.name == "grecipe");
@@ -70,41 +49,6 @@ chrome.extension.onConnect.addListener(function(port) {
 		}
 	});
 });
-
-chrome.tabs.onRemoved.addListener(
-    function(tabId) {
-        setRecipe(tabId, null);
-    }
-);
-
-function shouldOpenOnSave () {
-    return JSON.parse(localStorage.openOnSave);
-}
-
-function shouldSendAnalytics () {
-    return JSON.parse(localStorage.sendAnalytics);
-}
-
-function setOpenOnSave (value) {
-    localStorage.openOnSave = JSON.stringify(value);
-}
-
-function setSendAnalytics (value) {
-    localStorage.sendAnalytics = JSON.stringify(value);
-}
-
-function setRecipe(id, recipe) {
-    recipes[id] = recipe;
-}
-
-function getRecipe(id) {
-    return recipes[id];
-}
-
-function testUrl(test, url) {
-  var specials = new RegExp("[.+?|()\\[\\]{}\\\\]", "g");
-  return RegExp("^" + test.replace(specials, "\\$&").replace("*", ".*") + "$").test(url);
-}
 
 function logout() {
     chrome.tabs.create( {

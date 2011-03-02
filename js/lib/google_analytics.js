@@ -1,5 +1,6 @@
-var bgPage = chrome.extension.getBackgroundPage();
-if (bgPage.shouldSendAnalytics() && navigator.appVersion.indexOf("Mac")==-1) {
+(function(window, grecipe, undefined) {
+  
+if (grecipe.settings("sendanalytics") && navigator.appVersion.indexOf("Mac")==-1) {
     var _gaq = _gaq || [];
     _gaq.push(['_setAccount', 'UA-18727131-1']);
     _gaq.push(['_trackPageview']);
@@ -10,3 +11,5 @@ if (bgPage.shouldSendAnalytics() && navigator.appVersion.indexOf("Mac")==-1) {
         var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
     })();
 }
+
+})(this, chrome.extension.getBackgroundPage().grecipe);

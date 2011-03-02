@@ -14,7 +14,7 @@
       <h1>gRecipes Options</h1>
       
       <h3>Google Docs Permissions</h3>
-      <p><button id="revokeButton">Revoke Permissions</button></p>
+      <p><button id="revoke_button">Revoke Permissions</button></p>
       <p>Clicking this button will revoke gRecipes access to your Google
       Docs.  This can also be done from your <a title="Google Settings"
       href="https://www.google.com/accounts/b/0/IssuedAuthSubTokens?hl=en">
@@ -22,12 +22,12 @@
       until you grant gRecipes access again.</p>
       
       <h3>Automatic Open</h3>
-      <p><input id="openonsaveOption" type="checkbox">
-      Automatically open a new recipe when created.</p>
+      <p><input id="opt_openonsave" type="checkbox">
+      <label for="opt_openonsave">Automatically open a new recipe when created.</label></p>
       
       <h3>Usage Statistics</h3>
-      <p><input id="analyticsOption" type="checkbox">
-      Send Anonymous Usage Statistics. </p>
+      <p><input id="opt_sendanalytics" type="checkbox">
+      <label for="opt_analytics">Send Anonymous Usage Statistics.</label></p>
       
       <hr>
       
@@ -40,11 +40,11 @@
       
       <h4>License</h4>
       <p>gRecipes is open source under the
-      <a title="GPLv3" href="http://www.gnu.org/licenses/gpl-3.0.html">GPLv3
+      <a title="GPLv3" href="http://www.gnu.org/licenses/gpl-3.0.html">GPLv3<br>
       <img src="http://www.gnu.org/graphics/gplv3-88x31.png"></a></p>
     </div> <!--! end of #container -->
     
-    <script type="text/javascript" src="lib/jquery-1.5.min.js"></script>
+    <script type="text/javascript" src="js/lib/jquery.js"></script>
     <script type="text/javascript" src="js/options.js"></script>
   </body>
 </html>

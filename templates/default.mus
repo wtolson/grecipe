@@ -1,0 +1,92 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+
+  <title>{{name}}</title>
+    {{#summary}}
+      <meta name="description" content="{{summary}}">
+    {{/summary}}
+
+    {{#author}}
+      <meta name="author" content="{{author}}">
+    {{/author}}
+
+  <style type="text/css">
+    body{font-size:11pt;font-family:Arial;line-height:115%}
+    h1,h2,h3{font-weight:bold}          
+    h1{padding-top:14.0pt;padding-bottom:4.0pt;font-size:24pt}
+    h2{padding-top:14.0pt;padding-bottom:0.0pt;font-size:18pt}
+    h3{padding-top:0.0pt;padding-bottom:-8.0pt;font-size:14pt}
+    ul{list-style-type:disc;margin-left:6.0pt}
+    img{float:right}
+  </style>
+
+</head>
+
+<body>
+
+  <div id="container">
+  
+    <h1 class="fn">{{name}}</h1>
+    <h3 class="author">
+      {{author}}
+      (via <a href="{{url}}">{{host}}</a>)
+    </h3>
+
+    {{#photo}}
+      <p><img src="{{src}}" alt="{{alt}}" title="{{title}}" class="photo"></p>
+    {{/photo}}
+    
+    {{#summary}}
+      <p class="summary">{{summary}}</p>
+    {{/summary}}
+
+    {{#prepTime}}
+      <p>Prep Time: <span class="prepTime">{{value}}</span></p>
+    {{/prepTime}}
+
+    {{#cookTime}}
+      <p>Cook Time: <span class="cookTime">{{value}}</span></p>
+    {{/cookTime}}
+
+    {{#totalTime}}
+      <p>Total Time: <span class="prepTime">{{value}}</span></p>
+    {{/totalTime}}
+
+    {{#yield}}
+      <p>Yield: <span class="yield">{{yield}}</span></p>
+    {{/yield}}
+
+    {{#ingredients}}
+      <h2>Ingredients</h2>
+      {{#isArray}}
+        <ul>
+          {{#value}}
+            <li class="ingredient">{{.}}</li>
+          {{/value}}
+        </ul>
+      {{/isArray}}
+      {{#isString}}
+        <div class="ingredient">{{value}}</div>
+      {{/isString}}
+    {{/ingredients}}
+
+    {{#instructions}}
+      <h2>Instructions</h2>
+      {{#isArray}}
+        <ol>
+          {{#value}}
+            <li class="ingredient">{{.}}</li>
+          {{/value}}
+        </ol>
+      {{/isArray}}
+      {{#isString}}
+        <div class="ingredient">{{value}}</div>
+      {{/isString}}
+    {{/instructions}}
+    
+  </div> <!-- end of #container -->
+  
+</body>
+</html>

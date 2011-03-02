@@ -1,0 +1,139 @@
+/***********************************************************************
+ * 
+ *     This file is part of gRecipes.
+ *
+ *     gRecipes is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ *
+ *     gRecipes is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
+ * 
+ *     You should have received a copy of the GNU General Public License
+ *     along with gRecipes.  If not, see <http://www.gnu.org/licenses/>.
+ * 
+ **********************************************************************/
+
+{
+	"name": "hRecipe",
+	"author": "William T. Olson",
+	"version": "1.0",
+	"url": "*",
+	
+	hasRecipe: function() {
+		return !!$('.hrecipe').size();
+	},
+  
+	getName: function() {
+		return $('.hrecipe .fn').first().text().trim();
+	},
+  
+  getPhoto: function() {
+    var photo = $('.hrecipe .photo');
+    return (photo.size()) ? {
+      src: photo.get(0).src,
+      alt: photo.get(0).alt,
+      title: photo.get(0).title,
+    } : undefined;
+  },
+  
+  getPublished: function() {
+    var time = $('.hrecipe .published').first();
+    return (time.size()) ? {
+      "value": time.text().trim(),
+      "value-title": $(".value-title", time).attr("title")
+    } : undefined;
+  },
+  
+  getSummary: function() {
+    var summary = $('.hrecipe .summary');
+    return (summary.size()) ? summary.html().trim() : undefined;
+  },
+  
+  getCookTime: function() {
+    var time = $('.hrecipe .cookTime').first();
+    return (time.size()) ? {
+      "value": time.text().trim(),
+      "value-title": $(".value-title", time).attr("title")
+    } : undefined;
+  },
+  
+  getPrepTime: function() {
+    var time = $('.hrecipe .prepTime').first();
+    return (time.size()) ? {
+      "value": time.text().trim(),
+      "value-title": $(".value-title", time).attr("title")
+    } : undefined;
+  },
+  
+  getTotalTime: function() {
+    var time = $('.hrecipe .duration').first();
+    return (time.size()) ? {
+      "value": time.text().trim(),
+      "value-title": $(".value-title", time).attr("title")
+    } : undefined;
+  },
+  
+  getInstructions: function() {
+    
+    var instructions = $('.hrecipe .instructions');
+    if (!instructions.size()) {return undefined;};
+    
+    var blank = /^\s$/;
+    var temp = $('.instruction', instructions);
+    
+    if (!temp.size()) {
+      var temp = $('li', instructions);
+      if (!temp.size()) {
+        var temp = $('p', instructions);
+        if (!temp.size()) {
+          return (!blank.test(instructions.text())) ? {
+            value: instructions.html().trim(),
+            isString: true
+          } : undefined;
+        }
+      }
+    }
+    
+    instructions = [];
+    temp.each(function() {
+      if (!blank.test($(this).text())) {
+        instructions.push($(this).text().trim());
+      }
+    });
+    return {value: instructions, isArray: true};
+  },
+  
+  getYield: function() {
+    var yield = $('.hrecipe .yield').first();
+    return (yield.size()) ? yield.text().trim() : undefined;
+  },
+  
+  getIngredients: function() {
+    var ingredients = [];
+    var blank = /^\s$/;
+    function pushIngredient() {
+      if (!blank.test($(this).text())) {
+        ingredients.push($(this).text().trim());
+      }
+    };
+    
+    var temp = $('.hrecipe .ingredient .ingredient');
+    temp = (temp.size()) ? temp : $('.hrecipe .ingredient')
+    temp.each(pushIngredient);
+    
+    return (ingredients.length) ? {
+      value: ingredients,
+      isArray: true
+    } : undefined;
+  },
+  
+  getAuthor: function() {
+    var author = $('.hrecipe .author').first();
+    return (author.size()) ? author.text().trim() : undefined;
+  },
+  
+}
