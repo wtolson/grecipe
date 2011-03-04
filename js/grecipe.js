@@ -126,11 +126,7 @@ function onConnect_(port) {
     var grrId = activeGrrs_[i];
     var pattern = grrMeta_(grrId).url;
     if (testUrl_(pattern, tab.url)) {
-      var onLoad = $.Deferred();
-      chrome.tabs.executeScript(tab.id, {
-        code: "loadGrr('" + grrId + "'," + grrString_(grrId) + ");"
-      }, onLoad.resolve);
-      loadEvents.push(onLoad);
+      loadEvents.push(loadGrr_(tab.id, grrId));
     }
   }
   $.when.apply(null, loadEvents).then(function() {
@@ -195,6 +191,23 @@ function saveGrr_(url) {
 function testUrl_(test, url) {
   var specials = new RegExp("[.+?|()\\[\\]{}\\\\]", "g");
   return RegExp("^" + test.replace(specials, "\\$&").replace("*", ".*") + "$").test(url);
+};
+
+function loadGrr_(tabId, grrId) {
+  code = [];
+  code.push("try{");
+    code.push("console.log('here!');");
+    code.concat(["loadGrr(", "'", grrId, "',", grrString_(grrId), ");"]);
+  code.push("} catch (e) {");
+    code.push("console.log(e);");
+  code.push("}");
+  
+  var onLoad = $.Deferred();
+  chrome.tabs.executeScript(tabId, {
+    code: code.join(""),
+  }, onLoad.resolve);
+
+  return onLoad.promise();
 };
 
 function setup_(manifest) {

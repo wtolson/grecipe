@@ -32,15 +32,7 @@ function onImportComplete_(recipe, resp) {
   $('#message').html(Mustache.to_html(template, view));
 };
 
-$(function() {
-  // Make links work.
-  $('a').live("click", function(e) {
-    if (e.target.href) {
-      grecipe.openTab(e.target.href);
-      return false;
-    }
-  });
-  
+$(function() {  
   if (grecipe.hasAuth()) {
     chrome.tabs.getSelected(null, function(tab) {
       if  (grecipe.hasDefault(tab.id)) {
