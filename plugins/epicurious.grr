@@ -21,7 +21,6 @@
 	"name": "Epicurious",
 	"author": "William T. Olson",
 	"version": 1.0,
-	"update_url": "http://grecipes.googlecode.com/hg/js/plugins/epicurious.grr",
 	"url": "http://www.epicurious.com/*",
 	
 	hasRecipe: function() {
@@ -70,6 +69,5 @@
 		$('p', instructions).after('<br />');
 		
 		return instructions.html();
-	},
-  
+	}  
 }
