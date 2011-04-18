@@ -26,10 +26,6 @@ var grecipe = {
   settings: function(key, opt_value) {
     return storage_("grecipe." + key, opt_value);
   },
-
-  grrMeta: function(id) {
-    return grrMeta_(id);
-  },
   
   setDefaults: function(update) {
     var defaults = {
@@ -43,12 +39,17 @@ var grecipe = {
         grecipe.settings(setting, defaults[setting]);
       }
     }
-    
-    if (!update ||  storage_("grrids") == undefined) {
-      grrIds_ = [];
-      activeGrrs_ = [];
-      saveGrr_("plugins/hrecipe.grr");
-    }
+
+    var allGrrs = Grr.all();
+    allGrrs.count(function(count) {
+      if (!update ||  count == 0) {
+        allGrrs.destroyAll(function() {
+          Grr.fromUrl("plugins/hrecipe.grr", function(grr) {
+            persistence.add(grr);
+          });
+        });
+      }
+    });
 
     if (!update ||  storage_("template") == undefined) {
       $.ajax("templates/default.mus").then(function(template) {
@@ -103,14 +104,6 @@ function storage_(key, opt_value) {
   }
 };
 
-function grrMeta_(id, opt_grrObj) {
-  return storage_("grr.meta."+id, opt_grrObj);
-};
-
-function grrString_(id, opt_grrStr) {
-  return storage_("grr."+id, opt_grrStr);
-};
-
 function onConnect_(port) {
   console.assert(port.name == "grecipe");
   var tab = port.sender.tab;
@@ -122,17 +115,12 @@ function onConnect_(port) {
   port.onDisconnect.addListener(onDisconnect_);
   
   var loadEvents = [];
-  for (var i=0; i<activeGrrs_.length; i++) {
-    var grrId = activeGrrs_[i];
-    var pattern = grrMeta_(grrId).url;
-    if (testUrl_(pattern, tab.url)) {
-      var onLoad = $.Deferred();
-      chrome.tabs.executeScript(tab.id, {
-        code: "loadGrr('" + grrId + "'," + grrString_(grrId) + ");"
-      }, onLoad.resolve);
-      loadEvents.push(onLoad);
+  Grr.all().filter("active", "=", true).each(function(grr) {
+    if (grr.testUrl(tab.url)) {
+      loadEvents.push( grr.load(tab.id) );
     }
-  }
+  });
+  
   $.when.apply(null, loadEvents).then(function() {
     port.postMessage({type: "grrloaded"});
   });
@@ -170,33 +158,6 @@ function onHasRecipe_(tabId, grrs) {
   chrome.pageAction.show(tabId);
 };
 
-function saveGrr_(url) { 
-  $.ajax(url).then(function(grr) {
-    var id = sha1.toB64(grr);
-
-    for(var i=0; i<grrIds_.length; i++) {
-      if (id == grrIds_[i]) { return; }
-    }
-    
-    var grrObj = new Function("return (" + grr + ");")();
-    
-    grrIds_.push(id);
-    storage_("grrids", grrIds_);
-
-    activeGrrs_.push(id);
-    storage_("activegrrs", activeGrrs_);
-
-    grrMeta_(id, grrObj);
-    grrString_(id, grr);
-    
-  });
-};
-
-function testUrl_(test, url) {
-  var specials = new RegExp("[.+?|()\\[\\]{}\\\\]", "g");
-  return RegExp("^" + test.replace(specials, "\\$&").replace("*", ".*") + "$").test(url);
-};
-
 function setup_(manifest) {
   grecipe.manifest = manifest;
   var oldVersion = grecipe.settings("version");
@@ -230,10 +191,59 @@ function setup_(manifest) {
   grecipe.setDefaults();
 };
 
-var grrIds_ = storage_("grrids");
-var activeGrrs_ = storage_("activegrrs");
+//persistence.debug = false;
+persistence.store.websql.config(persistence, 'grecipe', '', 5 * 1024 * 1024);
+
+var Grr = persistence.define('Grr', {
+  name: "TEXT",
+  author: "TEXT",
+  version: "TEXT",
+  url: "TEXT",
+  hash: "TEXT",
+  script: "TEXT",
+  active: "BOOL"
+});
+
+Grr.index('hash',{unique:true});
+Grr.index('active');
+
+persistence.schemaSync();
+
+Grr.fromUrl = function(url, callback) {
+  $.ajax(url).then(function(content) {
+    var grr = new Grr();
+    grr.script = content;
+    
+    content = crunch(content);
+    grr.hash = sha1.toB64(content);
+
+    var meta = jsonParse(content);
+    for (property in meta) {
+      grr[property] = meta[property];
+    }
+
+    grr.active = true;
+    callback && callback(grr);
+  });
+};
+
+Grr.prototype.testUrl = function (url) {
+  var temp = this.url;
+  var specials = new RegExp("[.+?|()\\[\\]{}\\\\]", "g");
+  return RegExp("^" + temp.replace(specials, "\\$&").replace("*", ".*") + "$").test(url);
+};
+
+Grr.prototype.load = function (tabId) {
+  var onLoad = $.Deferred();
+  chrome.tabs.executeScript(tabId, {
+      code: "loadGrr('" + this.id + "', (" + this.script + "));"
+    }, onLoad.resolve);
+  return onLoad.promise();
+};
 
 $.getJSON('manifest.json', setup_);
+
+grecipe.Grr = Grr;
 
 var _grecipe = window.grecipe;
 window.grecipe = grecipe;
