@@ -74,15 +74,8 @@ Grr.prototype.getInstructions =
 Grr.prototype.getYield =
 Grr.prototype.getIngredients =
 Grr.prototype.getAuthor =
+Grr.prototype.getClosing = 
 function() {return undefined;};
-
-Grr.prototype.hasRecipe = function() {return false;};
-Grr.prototype.hasInstructions = function() {return !!this.hasInstructions_;};
-Grr.prototype.instructionsIsArray = function() {return !!this.instructionsIsArray_;};
-Grr.prototype.instructionsIsString = function() {return !!this.instructionsIsString_;};
-Grr.prototype.hasIngredients = function() {return !!this.hasIngredients_;};
-Grr.prototype.ingredientsIsArray = function() {return !!this.ingredientsIsArray_;};
-Grr.prototype.ingredientsIsString = function() {return !!this.ingredientsIsString_;};
 
 Grr.prototype.makeRecipe = function() {
   return {
@@ -100,6 +93,7 @@ Grr.prototype.makeRecipe = function() {
     yield: this.getYield(),
     ingredients: this.getIngredients(),
     author: this.getAuthor(),
+    closing: this.getClosing(),
     host: location.host,
     url: location.href,
   };
