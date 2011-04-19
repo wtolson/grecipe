@@ -212,8 +212,8 @@ function setup_(manifest) {
   chrome.extension.onConnect.addListener(onConnect_);
 
   // !!!For development!!! Reset Everything.
-  //grecipe.setDefaults(true);
-  localStorage.clear();
+  //grecipe.setDefaults(true);  // <--- Change back to this.
+  //localStorage.clear();
   grecipe.setDefaults();
 };
 

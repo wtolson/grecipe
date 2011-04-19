@@ -24,27 +24,26 @@
 	"url": "http://www.epicurious.com/*",
 	
 	hasRecipe: function() {
-		return ($('#recipe_detail_module').size() != 0);
+		return !!$('.hrecipe').size();
 	},
   
 	getName: function() {
-		return $('.fn').text().trim();
+		return $('.hrecipe .fn').first().text().trim();
 	},
   
 	getSummary: function() {
-		var viaText= 'Via <a href="'+document.URL+'">epicurious.com</a><br>';
-		
-		eval($('#recipeIntroText').children('script').text());
-		if(typeof recipeIntroText == "undefined" || recipeIntroText instanceof HTMLDivElement) {
-			var recipeIntroText =  $('#truncatedText').html();
-			if (recipeIntroText.blank()) {
-				return '<div>' + viaText + '</div>';
-			} else {
-				return '<div>' + viaText + '</div><br /><div>' + recipeIntroText + '</div>';
-			}
+    var strLiteral = "\"((?:[^\"\\\\]|\\\\.)*)\"";
+    var introText = RegExp("recipeIntroText\\s*=\\s*"+strLiteral).exec(
+      $('#recipeIntroText').children('script').text()
+    );  // Grab recipeIntroText variable without eval.
+
+      
+		if(introText.length < 2) {
+      return $('#truncatedText').text().trim() ?
+        $('#truncatedText').html().trim() : undefined;
 		}
 		
-		return '<div>' + viaText + '</div><br /><div>' + recipeIntroText + '</div>';
+		return introText[1].trim();
 	},
   
 	getIngredients: function() {

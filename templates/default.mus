@@ -60,13 +60,16 @@
 
     {{#ingredients}}
       <h2>Ingredients</h2>
-      {{#isArray}}
-        <ul>
-          {{#value}}
-            <li class="ingredient">{{.}}</li>
-          {{/value}}
-        </ul>
-      {{/isArray}}
+      {{^isString}}
+        {{#section}}
+          {{#title}}<h3>{{title}}</h3>{{/title}}
+          <ul>
+            {{#ingredients}}
+              <li class="ingredient">{{.}}</li>
+            {{/ingredients}}
+          </ul>
+        {{/section}}  
+      {{/isString}}
       {{#isString}}
         <div class="ingredient">{{value}}</div>
       {{/isString}}
@@ -74,15 +77,18 @@
 
     {{#instructions}}
       <h2>Instructions</h2>
-      {{#isArray}}
-        <ol>
-          {{#value}}
-            <li class="ingredient">{{.}}</li>
-          {{/value}}
-        </ol>
-      {{/isArray}}
+      {{^isString}}
+        {{#section}}
+          {{#title}}<h3>{{title}}</h3>{{/title}}
+          <ol class="instructions">
+            {{#instructions}}
+              <li class="instruction">{{.}}</li>
+            {{/instructions}}
+          </ol>
+        {{/section}}
+      {{/isString}}
       {{#isString}}
-        <div class="ingredient">{{value}}</div>
+        <div class="instructions">{{value}}</div>
       {{/isString}}
     {{/instructions}}
     
