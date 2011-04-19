@@ -104,7 +104,7 @@
         instructions.push($(this).text().trim());
       }
     });
-    return {value: instructions, isArray: true};
+    return {sections: {instructions: instructions}};
   },
   
   getYield: function() {
@@ -126,8 +126,7 @@
     temp.each(pushIngredient);
     
     return (ingredients.length) ? {
-      value: ingredients,
-      isArray: true
+      sections: {ingredients: ingredients}
     } : undefined;
   },
   

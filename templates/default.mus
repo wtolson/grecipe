@@ -61,14 +61,14 @@
     {{#ingredients}}
       <h2>Ingredients</h2>
       {{^isString}}
-        {{#section}}
+        {{#sections}}
           {{#title}}<h3>{{title}}</h3>{{/title}}
           <ul>
             {{#ingredients}}
               <li class="ingredient">{{.}}</li>
             {{/ingredients}}
           </ul>
-        {{/section}}  
+        {{/sections}}  
       {{/isString}}
       {{#isString}}
         <div class="ingredient">{{value}}</div>
@@ -78,14 +78,14 @@
     {{#instructions}}
       <h2>Instructions</h2>
       {{^isString}}
-        {{#section}}
+        {{#sections}}
           {{#title}}<h3>{{title}}</h3>{{/title}}
           <ol class="instructions">
             {{#instructions}}
               <li class="instruction">{{.}}</li>
             {{/instructions}}
           </ol>
-        {{/section}}
+        {{/sections}}
       {{/isString}}
       {{#isString}}
         <div class="instructions">{{value}}</div>
