@@ -39,7 +39,7 @@
     {{/photo}}
     
     {{#summary}}
-      <p class="summary">{{summary}}</p>
+      <div class="summary">{{summary}}</div>
     {{/summary}}
 
     {{#prepTime}}
@@ -91,6 +91,10 @@
         <div class="instructions">{{value}}</div>
       {{/isString}}
     {{/instructions}}
+
+    {{#closing}}
+      <div class="closing">{{closing}}</p>
+    {{/closing}}
     
   </div> <!-- end of #container -->
   
