@@ -21,6 +21,8 @@
 
 var tabs_ = {};
 var recipe_template_;
+var defaults_;
+var manifest_;
   
 var grecipe = {
     
@@ -29,22 +31,11 @@ var grecipe = {
   },
   
   setDefaults: function(update) {
-    var defaults = {
-      "version": grecipe.manifest.version,
-      "openonsave": false,
-      "sendanalytics": true,
-      "grrs": [{
-          "file": "plugins/hrecipe.grr",
-          "priority": 100
-        }, {
-          "file": "plugins/epicurious.grr",
-          "priority": 10
-        }]
-    };
+    this.settings("version", manifest_.version);
     
-    for (setting in defaults) {
-      if (!update ||  grecipe.settings(setting) == undefined) {
-        grecipe.settings(setting, defaults[setting]);
+    for (setting in defaults_.settings) {
+      if (!update ||  this.settings(setting) == undefined) {
+        this.settings(setting, defaults_.settings[setting]);
       }
     }
 
@@ -52,7 +43,7 @@ var grecipe = {
     allGrrs.count(function(count) {
       if (!update ||  count == 0) {
         allGrrs.destroyAll(function() {
-          defaults.grrs.map(function(g) {
+          defaults_.grrs.forEach(function(g) {
             Grr.fromUrl(g.file, {
               "priority": g.priority
             }).then(function(grr) {
@@ -106,6 +97,30 @@ var grecipe = {
       
     }
     return tabs_[tabId].deferred.promise();
+  },
+
+  log: function() {
+    if (this.debug) {
+      this.log.history = this.log.history || [];
+      this.log.history.push(arguments);
+      console.log.apply(console, arguments);
+    }
+  },
+
+  set debug(val) {
+    this.settings("debug", !!val);
+  },
+
+  get debug() {
+    return this.settings("debug");
+  },
+
+  get manifest() {
+    return manifest_;
+  },
+
+  get defaults() {
+    return defaults_;
   }
 };
 
@@ -132,11 +147,9 @@ function onConnect_(port) {
   port.onDisconnect.addListener(onDisconnect_);
   
   Grr.all().filter("active", "=", true).list(function(results) {
-    var loadEvents = [];
-    
-    results.map(function(grr) {
+    var loadEvents = results.map(function(grr) {
       if (grr.testUrl(tab.url)) {
-        loadEvents.push( grr.load(tab.id) );
+        return grr.load(tab.id);
       }
     });
 
@@ -171,7 +184,7 @@ function getRecipe_(tabId, grrId) {
 
 function onRecipe_(tabId, recipe) {
   // Debugging...
-  console.log("Recipe:", recipe);
+  this.log("Recipe:", recipe);
   //return;
   recipe_template_ = recipe_template_ | Handlebars.compile(storage_("template"));
   var doc = recipe_template_(recipe);
@@ -185,8 +198,12 @@ function onHasRecipe_(tabId, grrs) {
   chrome.pageAction.show(tabId);
 };
 
-function setup_(manifest) {
-  grecipe.manifest = manifest;
+function setup_(manifest, defaults) {
+  manifest_ = manifest;
+  defaults_ = defaults;
+  Object.freeze(manifest_);
+  Object.freeze(defaults_);
+  
   var oldVersion = grecipe.settings("version");
 
   // Check if orginal install or version < 1.8.2
@@ -194,11 +211,11 @@ function setup_(manifest) {
     if (localStorage["sendAnalytics"] || localStorage["openOnSave"]) {
       oldVersion = "1.8.1";
     } else {
-      grecipe.settings("version", oldVersion = manifest.version);
+      grecipe.settings("version", oldVersion = manifest_.version);
     }
   }
 
-  if (oldVersion < manifest.version) {
+  if (oldVersion < manifest_.version) {
     // Handle update
     if (oldVersion < "1.8.2") {
       grecipe.settings("sendanalytics", localStorage["sendAnalytics"]);
@@ -207,7 +224,7 @@ function setup_(manifest) {
       localStorage.removeItem("openOnSave");
     }
     
-    grecipe.settings("version", manifest.version);
+    grecipe.settings("version", manifest_.version);
   }
   
   chrome.extension.onConnect.addListener(onConnect_);
@@ -218,7 +235,7 @@ function setup_(manifest) {
   grecipe.setDefaults();
 };
 
-//persistence.debug = false;
+persistence.debug = grecipe.debug;
 persistence.store.websql.config(persistence, 'grecipe', '', 5 * 1024 * 1024);
 
 var Grr = persistence.define('Grr', {
@@ -278,7 +295,8 @@ Grr.prototype.load = function (tabId) {
 
 persistence.schemaSync();
 
-$.getJSON('manifest.json', setup_);
+$.when($.getJSON('manifest.json'), $.getJSON('defaults.json')).then(
+function(m,d){setup_(m[0], d[0]);});
 
 grecipe.Grr = Grr;
 

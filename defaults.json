@@ -1,0 +1,14 @@
+{
+  "settings": {
+    "debug": true,
+    "openonsave": true,
+    "sendanalytics": false,
+  },
+  "grrs": [{
+      "file": "plugins/hrecipe.grr",
+      "priority": 100
+    }, {
+      "file": "plugins/epicurious.grr",
+      "priority": 10
+    }]
+}
