@@ -24,12 +24,12 @@ function onImportComplete_(recipe, resp) {
   if (grecipe.settings("openonsave")) {
     grecipe.openTab(resp.entry.link[0].href);
   }
-  var view = {
+  
+  var template = Handlebars.compile( $("#template_openmsg").html() );
+  $('#message').html(template({
     title: resp.entry.title.$t,
     url: resp.entry.link[0].href,
-  };
-  var template = $("#template_openmsg").html();
-  $('#message').html(Mustache.to_html(template, view));
+  }));
 };
 
 $(function() {  
