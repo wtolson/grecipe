@@ -20,6 +20,7 @@
 (function(window, chrome, $, undefined) {
 
 var tabs_ = {};
+var recipe_template_;
   
 var grecipe = {
     
@@ -63,7 +64,7 @@ var grecipe = {
     });
 
     if (!update ||  storage_("template") == undefined) {
-      $.ajax("templates/default.mus").then(function(template) {
+      $.ajax("templates/default.html").then(function(template) {
         storage_("template", template);
       });
     }
@@ -172,8 +173,8 @@ function onRecipe_(tabId, recipe) {
   // Debugging...
   console.log("Recipe:", recipe);
   //return;
-  var template = storage_("template");
-  var doc = Mustache.to_html(template, recipe);
+  recipe_template_ = recipe_template_ | Handlebars.compile(storage_("template"));
+  var doc = recipe_template_(recipe);
   gdocs.createDoc(recipe.name, doc, function(resp) {
     tabs_[tabId].deferred.resolveWith(null, [recipe, JSON.parse(resp)]);
   });

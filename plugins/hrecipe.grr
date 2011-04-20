@@ -90,10 +90,8 @@
       if (!temp.size()) {
         var temp = $('p', instructions);
         if (!temp.size()) {
-          return (!blank.test(instructions.text())) ? {
-            value: instructions.html().trim(),
-            isString: true
-          } : undefined;
+          return (!blank.test(instructions.text())) ?
+              instructions.html().trim() : undefined;
         }
       }
     }
@@ -104,7 +102,7 @@
         instructions.push($(this).text().trim());
       }
     });
-    return {sections: {instructions: instructions}};
+    return {section: {instruction: instructions}};
   },
   
   getYield: function() {
@@ -126,13 +124,12 @@
     temp.each(pushIngredient);
     
     return (ingredients.length) ? {
-      sections: {ingredients: ingredients}
+      section: {ingredient: ingredients}
     } : undefined;
   },
   
   getAuthor: function() {
     var author = $('.hrecipe .author').first();
     return (author.size()) ? author.text().trim() : undefined;
-  },
-  
+  }
 }

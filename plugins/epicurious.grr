@@ -30,43 +30,117 @@
 	getName: function() {
 		return $('.hrecipe .fn').first().text().trim();
 	},
+
+  getPhoto: function() {
+    var photo = $('.hrecipe .photo');
+    return (photo.size()) ? {
+      src: photo.get(0).src,
+      alt: photo.get(0).alt,
+      title: photo.get(0).title,
+    } : undefined;
+  },
+
+  getYield: function() {
+    var yield = $('.hrecipe .yield').first();
+    return (yield.size()) ? yield.text().trim() : undefined;
+  },
+
+  getCookTime: function() {
+    var time = $('.hrecipe .cookTime').first();
+    return (time.size()) ? {
+      "value": time.text().trim(),
+      "value-title": $(".value-title", time).attr("title")
+    } : undefined;
+  },
+  
+  getPrepTime: function() {
+    var time = $('.hrecipe .prepTime').first();
+    return (time.size()) ? {
+      "value": time.text().trim(),
+      "value-title": $(".value-title", time).attr("title")
+    } : undefined;
+  },
+  
+  getTotalTime: function() {
+    var time = $('.hrecipe .duration').first();
+    return (time.size()) ? {
+      "value": time.text().trim(),
+      "value-title": $(".value-title", time).attr("title")
+    } : undefined;
+  },
   
 	getSummary: function() {
-    var strLiteral = "\"((?:[^\"\\\\]|\\\\.)*)\"";
+    var strLiteral = "(\"(?:[^\"\\\\]|\\\\.)*\")";
     var introText = RegExp("recipeIntroText\\s*=\\s*"+strLiteral).exec(
       $('#recipeIntroText').children('script').text()
     );  // Grab recipeIntroText variable without eval.
 
       
-		if(introText.length < 2) {
+		if(!introText || introText.length < 2) {
       return $('#truncatedText').text().trim() ?
         $('#truncatedText').html().trim() : undefined;
 		}
-		
-		return introText[1].trim();
+
+		return (new Function("return " + introText[1].trim()))();
 	},
   
 	getIngredients: function() {
-		var ingredients = $('#ingredients').clone();
+		var ingredients = $('#ingredients');
+    var sectionTitles = ingredients.children('strong');
+    var sections = [];
+    var ingredient;
+    if (sectionTitles.size()) {
+      sectionTitles.each(function() {
+        ingredient = [];
+        $(this).next('.ingredientsList').children('.ingredient').each(function() {
+          ingredient.push(this.innerHTML);
+        });
+        sections.push({title: this.textContent.trim(), ingredient: ingredient});
+      });
+    } else {
+      ingredient = [];
+      ingredients.children('.ingredientsList').children('.ingredient').each(function() {
+          ingredient.push(this.innerHTML);
+      });
+      sections.push({ingredient: ingredient});
+    }
 		
-		$('#ingredients_headline_wrapper', ingredients).remove();
-		$('#printShoppingList', ingredients).remove();
-		$('br', ingredients).remove();
-		
-		ingredients.children('strong').each(function(index) {
-			$(this).replaceWith($('<h3>' + $(this).text() + '</h3>'));
-		});
-		
-		return ingredients.html();
+		return sections ? {section: sections} : undefined;
 	},
   
 	getInstructions: function() {
 		var instructions = $('#preparation').clone();
-    
-		$('h2', instructions).remove();
-		$('#addnoteLnk', instructions).remove();
-		$('p', instructions).after('<br />');
-		
-		return instructions.html();
-	}  
+    var sections = [];
+
+    var section = {instruction: []};
+    instructions.children('.instruction').each(function (index) {
+      var title = $(this).children('strong');
+      if (title.size()) {
+        title = title.get(0);
+        if (index) {
+          sections.push(section);
+          section = {instruction: []};
+        }
+        section.title = title.textContent.trim();
+        $(title).next('br').remove();
+        $(title).remove();
+      }
+      section.instruction.push(this.innerHTML);
+    });
+
+    sections.push(section);
+    return sections ? {section: sections} : undefined;
+	},
+
+  getClosing: function() {
+    var closing = $('#chefNotes').clone();
+    closing.remove('#addnoteLnk');
+    closing = closing.text().trim();
+    return closing ? closing : undefined;
+  },
+  
+  getAuthor: function() {
+    var author = $('.hrecipe .author').first();
+    return (author.size()) ? author.text().trim() : undefined;
+  }
 }
