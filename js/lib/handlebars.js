@@ -1416,3 +1416,4 @@ Handlebars.VM = {
 
 Handlebars.compile = Handlebars.VM.compile;;
 Handlebars.registerHelper('helperMissing', function(context) {return ""; });
+Handlebars.registerHelper('json', function(context) {return JSON.stringify(context);});

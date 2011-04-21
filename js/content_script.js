@@ -19,44 +19,102 @@
 
 (function(window, chrome, undefined) {
 
-var grrs_ = {};
+var debug_ = false,
+    grrs_;
+
+function log_() {
+  if (debug_) {
+    log_.history = log_.history || [];
+    log_.history.push(arguments);
+    console.log.apply(console, arguments);
+  }
+};
   
 function onMessage_(msg) {
+  log_("gRecipe Msg:", msg);
   switch (msg.type) {
-    case "grrloaded":
-      checkGrrs_();
+    case "loadgrrs":
+      loadGrrs_(msg.grrs);
       break;
     case "getrecipe":
       getRecipe_(msg.grrId);
       break;
+    case "debug":
+      if (!msg.debug) log_("Debug turned off.");
+      debug_ = !!msg.debug;
+      log_("Debug turned on.");
+      break;
   }
 };
 
-function loadGrr(id, grr) {
-  grrs_[id] = grrify(grr);
-};
+function loadGrrs_(grrs) {
+  grrs_ = grrs.map(unwrap_).map(grrify_).filter(checkGrr_);
 
-function checkGrrs_() {
-  var ids = [];
-  for (id in grrs_) {
-    if (grrs_[id].hasRecipe()) {
-      ids.push(id);
-    }
-  }
-  
-  if (ids.length) {
+  if (grrs_.length) {
     port.postMessage({
       type: "hasrecipe",
-      grrs: ids,
+      grrs: grrs_,
     });
   }
 };
 
+function unwrap_(grr) {
+  try {
+    var unwraped = (new Function("return ("+grr.script+");"))();
+    grr = $.extend(unwraped, grr);
+    delete grr.script;
+  } catch(e) {
+    log_("%s (While loading grr %s)", e, grr.name, grr);
+  }
+  return grr;
+};
+
+function grrify_(obj) {
+  obj.__proto__ = Grr.prototype;
+  obj.__super = Grr;
+  obj.constructor();
+  return obj;
+};
+
+function checkGrr_(grr) {
+    try {
+      if (grr.hasRecipe()) {
+        log_("Has recipe:", grr.name, grr);
+        return true;
+      } else {
+        log_("Rejected grr:", grr.name, grr);
+        return false;
+      }
+    } catch (e) {
+      log_("Error checking grr %s:", grr.name, e, grr);
+      return false;
+    }
+};
+
 function getRecipe_(grrId) {
-  port.postMessage({
-    type: "recipe",
-    recipe: grrs_[grrId].makeRecipe(),
-  });
+  if (!grrs_.length) return;
+  
+  var grr;
+  if (grrId == undefined) {
+    grr = grrs_[0];
+  } else {
+    for(var i=0; i<grrs_.length; i++) {
+      if (grrId == grrs_[i].id) {
+        grr = grrs_[i];
+        break;
+      }
+    }
+  }
+  if (grr == undefined) return;
+  
+  try {
+    port.postMessage({
+      type: "recipe",
+      recipe: grr.makeRecipe(),
+    });
+  } catch (e) {
+    log_("%s (While making recipe from %s)", e, grr.name, grr);
+  }
 };
 
 function Grr() {};
@@ -76,6 +134,8 @@ Grr.prototype.getIngredients =
 Grr.prototype.getAuthor =
 Grr.prototype.getClosing = 
 function() {return undefined;};
+
+Grr.prototype.hasRecipe = function() {return false;};
 
 Grr.prototype.makeRecipe = function() {
   return {
@@ -99,15 +159,6 @@ Grr.prototype.makeRecipe = function() {
   };
 };
 
-function grrify(obj) {
-  obj.__proto__ = Grr.prototype;
-  obj.__super = Grr;
-  obj.constructor();
-  return obj;
-};
-
-
-window.loadGrr = loadGrr;
 var port = chrome.extension.connect({name: "grecipe"});
 port.onMessage.addListener(onMessage_);
 

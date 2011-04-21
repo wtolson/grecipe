@@ -19,23 +19,24 @@
  
 (function(window, chrome, $, undefined) {
 
-var tabs_ = {};
-var recipe_template_;
-var defaults_;
-var manifest_;
-  
+var tabs_ = {},
+    recipe_template_,
+    loadGrr_template_,
+    defaults_,
+    manifest_,
+    Grr;
+
 var grecipe = {
-    
   settings: function(key, opt_value) {
     return storage_("grecipe." + key, opt_value);
   },
   
   setDefaults: function(update) {
-    this.settings("version", manifest_.version);
+    grecipe.settings("version", manifest_.version);
     
     for (setting in defaults_.settings) {
-      if (!update ||  this.settings(setting) == undefined) {
-        this.settings(setting, defaults_.settings[setting]);
+      if (!update ||  grecipe.settings(setting) == undefined) {
+        grecipe.settings(setting, defaults_.settings[setting]);
       }
     }
 
@@ -79,40 +80,29 @@ var grecipe = {
   
   importRecipe: function(tabId, grrId) {
     if (!tabs_[tabId].deferred || tabs_[tabId].deferred.isResolved()) {
-      if (grrId == undefined) {
-        var grrs = tabs_[tabId].grrs;
-        var topGrr = Grr.all().filter('id', '=', grrs[0]);
-        for(var i=1; i<grrs.length; i++) {
-          var another = new persistence.PropertyFilter('id', '=', grrs[i]);
-          topGrr = topGrr.or(another);
-        }
-        topGrr.order('priority', true).one(function(grr) {
-          getRecipe_(tabId, grr.id);
-        });
-      } else {
-        getRecipe_(tabId, grrId);
-      }
-      //grrId = grrId ? grrId : tabs_[tabId].grrs[0];
       tabs_[tabId].deferred = $.Deferred();
-      
+      tabs_[tabId].port.postMessage({
+        type: "getrecipe",
+        grrId: grrId,
+      });      
     }
     return tabs_[tabId].deferred.promise();
   },
 
   log: function() {
-    if (this.debug) {
-      this.log.history = this.log.history || [];
-      this.log.history.push(arguments);
+    if (grecipe.debug) {
+      grecipe.log.history = grecipe.log.history || [];
+      grecipe.log.history.push(arguments);
       console.log.apply(console, arguments);
     }
   },
 
   set debug(val) {
-    this.settings("debug", !!val);
+    grecipe.settings("debug", !!val);
   },
 
   get debug() {
-    return this.settings("debug");
+    return grecipe.settings("debug");
   },
 
   get manifest() {
@@ -124,6 +114,8 @@ var grecipe = {
   }
 };
 
+var log_ = grecipe.log;
+
 function storage_(key, opt_value) {
   if (opt_value == undefined) {
     try {
@@ -132,6 +124,7 @@ function storage_(key, opt_value) {
       return localStorage[key];
     }
   } else {
+    log_("Storage: '%s' set as", key, opt_value);
     localStorage[key] = JSON.stringify(opt_value);
   }
 };
@@ -145,18 +138,22 @@ function onConnect_(port) {
   };
   port.onMessage.addListener(onMessage_);
   port.onDisconnect.addListener(onDisconnect_);
+
+  port.postMessage({type: "debug", debug: grecipe.debug});
   
-  Grr.all().filter("active", "=", true).list(function(results) {
-    var loadEvents = results.map(function(grr) {
-      if (grr.testUrl(tab.url)) {
-        return grr.load(tab.id);
+  Grr
+    .all()
+    .filter("active", "=", true)
+    .order('priority', true)
+    .list(function(results) {
+      var matches = results.filter(function(grr) {
+        return grr.testUrl(tab.url);
+      });
+
+      if (matches.length) {
+        port.postMessage({type: "loadgrrs", grrs: matches});
       }
     });
-
-    $.when.apply(null, loadEvents).then(function() {
-      port.postMessage({type: "grrloaded"});
-    });
-  });  
 };
 
 function onDisconnect_(port) {
@@ -165,6 +162,7 @@ function onDisconnect_(port) {
 
 function onMessage_(msg, port) {
   var tab = port.sender.tab;
+  log_("Recived Msg:", port, msg);
   switch (msg.type) {
     case "hasrecipe":
       onHasRecipe_(tab.id, msg.grrs);
@@ -175,19 +173,10 @@ function onMessage_(msg, port) {
   }
 };
 
-function getRecipe_(tabId, grrId) {
-  tabs_[tabId].port.postMessage({
-        type: "getrecipe",
-        grrId: grrId,
-  });
-};
-
 function onRecipe_(tabId, recipe) {
-  // Debugging...
-  this.log("Recipe:", recipe);
-  //return;
-  recipe_template_ = recipe_template_ | Handlebars.compile(storage_("template"));
+  recipe_template_ = recipe_template_ || Handlebars.compile(storage_("template"));
   var doc = recipe_template_(recipe);
+  log_(doc);
   gdocs.createDoc(recipe.name, doc, function(resp) {
     tabs_[tabId].deferred.resolveWith(null, [recipe, JSON.parse(resp)]);
   });
@@ -199,11 +188,23 @@ function onHasRecipe_(tabId, grrs) {
 };
 
 function setup_(manifest, defaults) {
-  manifest_ = manifest;
-  defaults_ = defaults;
+  manifest_ = manifest[0];
+  defaults_ = defaults[0];
   Object.freeze(manifest_);
   Object.freeze(defaults_);
   
+  grecipe.Grr = Grr = initGrr_();
+  
+  update_();
+  // !!!For development!!! Reset Everything.
+  //grecipe.setDefaults(true);  // <--- Change back to this.
+  grecipe.setDefaults();
+
+  chrome.extension.onConnect.addListener(onConnect_);
+  window.grecipe = grecipe;
+};
+
+function update_() {
   var oldVersion = grecipe.settings("version");
 
   // Check if orginal install or version < 1.8.2
@@ -226,81 +227,64 @@ function setup_(manifest, defaults) {
     
     grecipe.settings("version", manifest_.version);
   }
-  
-  chrome.extension.onConnect.addListener(onConnect_);
-
-  // !!!For development!!! Reset Everything.
-  //grecipe.setDefaults(true);  // <--- Change back to this.
-  //localStorage.clear();
-  grecipe.setDefaults();
 };
 
-persistence.debug = grecipe.debug;
-persistence.store.websql.config(persistence, 'grecipe', '', 5 * 1024 * 1024);
+function initGrr_() {
+  persistence.debug = grecipe.debug != undefined ? !!grecipe.debug : defaults_.debug;
+  persistence.store.websql.config(persistence, 'grecipe', '', 5 * 1024 * 1024);
 
-var Grr = persistence.define('Grr', {
-  name: "TEXT",
-  author: "TEXT",
-  version: "TEXT",
-  url: "TEXT",
-  hash: "TEXT",
-  script: "TEXT",
-  priority: "INT",
-  active: "BOOL"
-});
-
-Grr.index('hash',{unique:true});
-Grr.index(['active', 'priority']);
-
-Grr.fromUrl = function(url, options) {
-  options = $.extend({
-    "priority": 1000,
-    "active": true
-  }, options);
-  
-  var deferred = $.Deferred();
-  $.ajax(url).then(function(content) {
-    var grr = new Grr();
-    grr.script = content;
-    
-    content = crunch(content);
-    grr.hash = sha1.toB64(content);
-
-    var meta = jsonParse(content);
-    for (property in meta) {
-      grr[property] = meta[property];
-    }
-
-    grr.active = options.active;
-    grr.priority = options.priority;
-    
-    deferred.resolve(grr);
+  var Grr = persistence.define('Grr', {
+    name: "TEXT",
+    author: "TEXT",
+    version: "TEXT",
+    url: "TEXT",
+    hash: "TEXT",
+    script: "TEXT",
+    priority: "INT",
+    active: "BOOL"
   });
-  return deferred.promise();
+
+  Grr.index('hash',{unique:true});
+  Grr.index(['active', 'priority']);
+
+  Grr.fromUrl = function(url, options) {
+    options = $.extend({
+      "priority": 1000,
+      "active": true
+    }, options);
+    
+    var deferred = $.Deferred();
+    $.ajax(url).then(function(content) {
+      var grr = new Grr();
+      grr.script = content;
+      
+      content = crunch(content);
+      grr.hash = sha1.toB64(content);
+
+      var meta = jsonParse(content);
+      for (property in meta) {
+        grr[property] = meta[property];
+      }
+
+      grr.active = options.active;
+      grr.priority = options.priority;
+      
+      deferred.resolve(grr);
+    });
+    return deferred.promise();
+  };
+
+  Grr.prototype.testUrl = function (url) {
+    var temp = this.url;
+    var specials = new RegExp("[.+?|()\\[\\]{}\\\\]", "g");
+    return RegExp("^" + temp.replace(specials, "\\$&").replace("*", ".*") + "$").test(url);
+  };
+
+  persistence.schemaSync();
+
+  return Grr;
 };
 
-Grr.prototype.testUrl = function (url) {
-  var temp = this.url;
-  var specials = new RegExp("[.+?|()\\[\\]{}\\\\]", "g");
-  return RegExp("^" + temp.replace(specials, "\\$&").replace("*", ".*") + "$").test(url);
-};
-
-Grr.prototype.load = function (tabId) {
-  var onLoad = $.Deferred();
-  chrome.tabs.executeScript(tabId, {
-      code: "loadGrr('" + this.id + "', (" + this.script + "));"
-    }, onLoad.resolve);
-  return onLoad.promise();
-};
-
-persistence.schemaSync();
-
-$.when($.getJSON('manifest.json'), $.getJSON('defaults.json')).then(
-function(m,d){setup_(m[0], d[0]);});
-
-grecipe.Grr = Grr;
-
-var _grecipe = window.grecipe;
-window.grecipe = grecipe;
+$.when($.getJSON('manifest.json'), $.getJSON('defaults.json')).then(setup_);
   
 })(this, this.chrome, this.jQuery);
