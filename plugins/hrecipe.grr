@@ -81,47 +81,47 @@
     
     var instructions = $('.hrecipe .instructions');
     if (!instructions.size()) {return undefined;};
+
+    var containers = ['.instruction', 'li', 'p'];
     
-    var blank = /^\s$/;
-    var temp = $('.instruction', instructions);
-    
+    var temp;
+    do {
+      temp = $(containers.shift(), instructions);
+    } while(!temp.size());
+
     if (!temp.size()) {
-      var temp = $('li', instructions);
-      if (!temp.size()) {
-        var temp = $('p', instructions);
-        if (!temp.size()) {
-          return (!blank.test(instructions.text())) ?
-              instructions.html().trim() : undefined;
-        }
-      }
+      return instructions.text.empty() ? undefined : instructions.html();
     }
     
-    instructions = [];
-    temp.each(function() {
-      if (!blank.test($(this).text())) {
-        instructions.push($(this).text().trim());
-      }
+    instructions = temp.map(function() {
+      return this.textContent.trim();
+    }).get().filter(function(item) {
+      return !item.empty();
     });
+
     return {section: {instruction: instructions}};
   },
   
-  getYield: function() {
-    var yield = $('.hrecipe .yield').first();
-    return (yield.size()) ? yield.text().trim() : undefined;
+  getYield: function() { // yeild is a reserved word!!!
+    var y = $('.hrecipe .yield').first();
+    return (y.size()) ? y.text().trim() : undefined;
   },
   
   getIngredients: function() {
-    var ingredients = [];
-    var blank = /^\s$/;
-    function pushIngredient() {
-      if (!blank.test($(this).text())) {
-        ingredients.push($(this).text().trim());
-      }
-    };
-    
-    var temp = $('.hrecipe .ingredient .ingredient');
-    temp = (temp.size()) ? temp : $('.hrecipe .ingredient')
-    temp.each(pushIngredient);
+    var containers = ['.hrecipe .ingredient .ingredient', '.hrecipe .ingredient'];
+
+    var temp;
+    do {
+      temp = $(containers.shift());
+    } while(!temp.size());
+
+    if (!temp.size()) {return undefined;}
+
+    var ingredients = temp.map(function() {
+      return this.textContent.trim();
+    }).get().filter(function(item) {
+      return !item.empty();
+    });
     
     return (ingredients.length) ? {
       section: {ingredient: ingredients}

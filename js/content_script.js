@@ -65,6 +65,7 @@ function unwrap_(grr) {
     delete grr.script;
   } catch(e) {
     log_("%s (While loading grr %s)", e, grr.name, grr);
+    console.trace();
   }
   return grr;
 };
@@ -87,6 +88,7 @@ function checkGrr_(grr) {
       }
     } catch (e) {
       log_("Error checking grr %s:", grr.name, e, grr);
+      console.trace();
       return false;
     }
 };
@@ -113,7 +115,8 @@ function getRecipe_(grrId) {
       recipe: grr.makeRecipe(),
     });
   } catch (e) {
-    log_("%s (While making recipe from %s)", e, grr.name, grr);
+    log_("%s (While making recipe from %s)", e, grr.name, grr, e.stack);
+    console.trace();
   }
 };
 
@@ -161,5 +164,11 @@ Grr.prototype.makeRecipe = function() {
 
 var port = chrome.extension.connect({name: "grecipe"});
 port.onMessage.addListener(onMessage_);
+
+var blank_;
+String.prototype.empty = function() {
+  blank_ = blank_ || /^\s*$/;
+  return blank_.test(this);
+};
 
 })(this, this.chrome);

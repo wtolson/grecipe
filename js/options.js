@@ -25,17 +25,17 @@ function on_revoke_button_click(event) {
 };
 
 function on_opt_openonsave_click(event) {
-  grecipe.settings("openonsave", event.target.checked);
+  grecipe.settings.openonsave = event.target.checked;
 };
 
 function on_opt_sendanalytics_click(event) {
-  grecipe.settings("sendanalytics", event.target.checked);
+  grecipe.settings.sendanalytics = event.target.checked;
 };
 
 function initUI() {
   $('#revoke_button').attr("disabled", !grecipe.hasAuth());
-  $('#opt_openonsave').attr("checked", grecipe.settings("openonsave"));
-  $('#opt_sendanalytics').attr("checked", grecipe.settings("sendanalytics"));
+  $('#opt_openonsave').attr("checked", grecipe.settings.openonsave);
+  $('#opt_sendanalytics').attr("checked", grecipe.settings.sendanalytics);
 };
 
 $(function() {

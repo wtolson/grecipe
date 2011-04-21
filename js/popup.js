@@ -21,7 +21,7 @@
 (function(window, grecipe, $, undefined) {
   
 function onImportComplete_(recipe, resp) {
-  if (grecipe.settings("openonsave")) {
+  if (grecipe.settings.openonsave) {
     grecipe.openTab(resp.entry.link[0].href);
   }
   

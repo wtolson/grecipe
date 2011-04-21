@@ -24,42 +24,32 @@ var tabs_ = {},
     loadGrr_template_,
     defaults_,
     manifest_,
-    Grr;
+    settings_,
+    Grr; 
 
 var grecipe = {
-  settings: function(key, opt_value) {
-    return storage_("grecipe." + key, opt_value);
-  },
   
-  setDefaults: function(update) {
-    grecipe.settings("version", manifest_.version);
+  setDefaults: function() {
+    settings_.version = manifest_.version;
     
     for (setting in defaults_.settings) {
-      if (!update ||  grecipe.settings(setting) == undefined) {
-        grecipe.settings(setting, defaults_.settings[setting]);
-      }
+      settings_[setting] = defaults_.settings[setting];
     }
 
     var allGrrs = Grr.all();
-    allGrrs.count(function(count) {
-      if (!update ||  count == 0) {
-        allGrrs.destroyAll(function() {
-          defaults_.grrs.forEach(function(g) {
-            Grr.fromUrl(g.file, {
-              "priority": g.priority
-            }).then(function(grr) {
-              persistence.add(grr);
-            });
-          });
+    allGrrs.destroyAll(function() {
+      defaults_.grrs.forEach(function(g) {
+        Grr.fromUrl(g.file, {
+          "priority": g.priority
+        }).then(function(grr) {
+          persistence.add(grr);
         });
-      }
+      });
     });
 
-    if (!update ||  storage_("template") == undefined) {
-      $.ajax("templates/default.html").then(function(template) {
-        storage_("template", template);
-      });
-    }
+    $.ajax("templates/default.html").then(function(template) {
+      storage_("template", template);
+    });
   },
   
   openTab: function(url, callback) {
@@ -98,11 +88,11 @@ var grecipe = {
   },
 
   set debug(val) {
-    grecipe.settings("debug", !!val);
+    grecipe.settings.debug = !!val;
   },
 
   get debug() {
-    return grecipe.settings("debug");
+    return grecipe.settings.debug;
   },
 
   get manifest() {
@@ -111,6 +101,10 @@ var grecipe = {
 
   get defaults() {
     return defaults_;
+  },
+
+  get settings() {
+    return settings_ || defaults_.settings;
   }
 };
 
@@ -192,46 +186,71 @@ function setup_(manifest, defaults) {
   defaults_ = defaults[0];
   Object.freeze(manifest_);
   Object.freeze(defaults_);
-  
+
+  persistence.debug = grecipe.settings.debug;
+  persistence.store.websql.config(persistence, 'grecipe', '', 5 * 1024 * 1024);
+
   grecipe.Grr = Grr = initGrr_();
-  
+  settings_ = initSettings_();
+
   update_();
-  // !!!For development!!! Reset Everything.
-  //grecipe.setDefaults(true);  // <--- Change back to this.
-  grecipe.setDefaults();
 
   chrome.extension.onConnect.addListener(onConnect_);
   window.grecipe = grecipe;
 };
 
 function update_() {
-  var oldVersion = grecipe.settings("version");
+  var oldVersion = settings_.version;
 
   // Check if orginal install or version < 1.8.2
   if (oldVersion == undefined) {
     if (localStorage["sendAnalytics"] || localStorage["openOnSave"]) {
       oldVersion = "1.8.1";
     } else {
-      grecipe.settings("version", oldVersion = manifest_.version);
+      oldVersion = settings_.version = manifest_.version;
+      grecipe.setDefaults();
     }
   }
 
   if (oldVersion < manifest_.version) {
     // Handle update
     if (oldVersion < "1.8.2") {
-      grecipe.settings("sendanalytics", localStorage["sendAnalytics"]);
+      grecipe.setDefaults();
+      settings_.sendanalytics = localStorage["sendAnalytics"];
       localStorage.removeItem("sendAnalytics");
-      grecipe.settings("openonsave", localStorage["openOnSave"]);
+      settings_.openonsave = localStorage["openOnSave"];
       localStorage.removeItem("openOnSave");
     }
-    
-    grecipe.settings("version", manifest_.version);
+
+    settings_.version = manifest_.version;
   }
 };
 
+function initSettings_() {
+  function get_(key) {
+    return storage_("grecipe."+key);
+  };
+
+  function set_(key, value) {
+    log_("Set %s to", key, value);
+    return storage_("grecipe."+key, value);
+  };
+
+  function createproperty_(obj, key) {
+    obj.__defineGetter__(key, get_.bind(null, key));
+    obj.__defineSetter__(key, set_.bind(null, key));
+  };
+
+  var settings = {};
+  for (property in defaults_.settings) {
+    createproperty_(settings, property);
+  }
+
+  Object.freeze(settings);
+  return settings;
+};
+
 function initGrr_() {
-  persistence.debug = grecipe.debug != undefined ? !!grecipe.debug : defaults_.debug;
-  persistence.store.websql.config(persistence, 'grecipe', '', 5 * 1024 * 1024);
 
   var Grr = persistence.define('Grr', {
     name: "TEXT",
