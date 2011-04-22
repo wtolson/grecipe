@@ -1,6 +1,6 @@
 (function(window, grecipe, undefined) {
   
-if (grecipe.settings("sendanalytics") && navigator.appVersion.indexOf("Mac")==-1) {
+if (grecipe.settings.sendanalytics && navigator.appVersion.indexOf("Mac")==-1) {
     var _gaq = _gaq || [];
     _gaq.push(['_setAccount', 'UA-18727131-1']);
     _gaq.push(['_trackPageview']);
