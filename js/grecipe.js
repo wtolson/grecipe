@@ -296,7 +296,8 @@ function initGrr_() {
   Grr.prototype.testUrl = function (url) {
     var temp = this.url;
     var specials = new RegExp("[.+?|()\\[\\]{}\\\\]", "g");
-    return RegExp("^" + temp.replace(specials, "\\$&").replace("*", ".*") + "$").test(url);
+    var star = new RegExp("\\*", "g");
+    return RegExp("^" + temp.replace(specials, "\\$&").replace(star, ".*") + "$", "i").test(url);
   };
 
   persistence.schemaSync();
