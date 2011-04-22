@@ -31,6 +31,11 @@
 		return $('.hrecipe .fn').first().text().reduce();
 	},
   
+  getAuthor: function() {
+    var author = $('.hrecipe .author').first();
+    return (author.size()) ? author.text().reduce() : undefined;
+  },
+  
   getPhoto: function() {
     var photo = $('.hrecipe .photo');
     return (photo.size()) ? {
@@ -77,32 +82,7 @@
     } : undefined;
   },
   
-  getInstructions: function() {
-    
-    var instructions = $('.hrecipe .instructions');
-    if (!instructions.size()) {return undefined;};
-
-    var containers = ['.instruction', 'li', 'p'];
-    
-    var temp;
-    do {
-      temp = $(containers.shift(), instructions);
-    } while(!temp.size() && containers.length);
-
-    if (!temp.size()) {
-      return instructions.text.empty() ? undefined : instructions.html();
-    }
-    
-    instructions = temp.map(function() {
-      return this.textContent.reduce();
-    }).get().filter(function(item) {
-      return !item.empty();
-    });
-
-    return {section: {instruction: instructions}};
-  },
-  
-  getYield: function() { // yeild is a reserved word!!!
+  getYield: function() { // yeild is a reserved word!!! Using y instead.
     var y = $('.hrecipe .yield').first();
     return (y.size()) ? y.text().reduce() : undefined;
   },
@@ -133,8 +113,28 @@
     } : undefined;
   },
   
-  getAuthor: function() {
-    var author = $('.hrecipe .author').first();
-    return (author.size()) ? author.text().reduce() : undefined;
+  getInstructions: function() {
+    
+    var instructions = $('.hrecipe .instructions');
+    if (!instructions.size()) {return undefined;};
+
+    var containers = ['.instruction', 'li', 'p'];
+    
+    var temp;
+    do {
+      temp = $(containers.shift(), instructions);
+    } while(!temp.size() && containers.length);
+
+    if (!temp.size()) {
+      return instructions.text.empty() ? undefined : instructions.html();
+    }
+    
+    instructions = temp.map(function() {
+      return this.textContent.reduce();
+    }).get().filter(function(item) {
+      return !item.empty();
+    });
+
+    return {section: {instruction: instructions}};
   }
 }
