@@ -19,15 +19,18 @@
  
 (function(window, chrome, $, undefined) {
 
-var tabs_ = {},
+var loaded_ = $.Deferred(),
+    tabs_ = {},
     recipe_template_,
     loadGrr_template_,
     defaults_,
     manifest_,
     settings_,
-    Grr; 
+    Grr;
 
 var grecipe = {
+
+  loaded: loaded_.promise(),
   
   setDefaults: function() {
     settings_.version = manifest_.version;
@@ -194,9 +197,9 @@ function setup_(manifest, defaults) {
   settings_ = initSettings_();
 
   update_();
-
   chrome.extension.onConnect.addListener(onConnect_);
-  window.grecipe = grecipe;
+
+  loaded_.resolve();
 };
 
 function update_() {
@@ -306,5 +309,7 @@ function initGrr_() {
 };
 
 $.when($.getJSON('manifest.json'), $.getJSON('defaults.json')).then(setup_);
+
+window.grecipe = grecipe;
   
 })(this, this.chrome, this.jQuery);
