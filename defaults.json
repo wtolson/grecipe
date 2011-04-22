@@ -26,6 +26,9 @@
     }, {
       "file": "plugins/foodandwine.grr",
       "priority": 10
+    }, {
+      "file": "plugins/foodnetwork.grr",
+      "priority": 10
     }
   ]
 }
