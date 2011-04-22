@@ -87,7 +87,7 @@
     var temp;
     do {
       temp = $(containers.shift(), instructions);
-    } while(!temp.size());
+    } while(!temp.size() && containers.length);
 
     if (!temp.size()) {
       return instructions.text.empty() ? undefined : instructions.html();
@@ -108,12 +108,17 @@
   },
   
   getIngredients: function() {
-    var containers = ['.hrecipe .ingredient .ingredient', '.hrecipe .ingredient'];
+    var containers = [
+      '.hrecipe .ingredient .ingredient',
+      '.hrecipe .ingredient',
+      '.hrecipe .ingredients li',
+      '.hrecipe .ingredients p'
+    ];
 
     var temp;
     do {
       temp = $(containers.shift());
-    } while(!temp.size());
+    } while(!temp.size() && containers.length);
 
     if (!temp.size()) {return undefined;}
 
