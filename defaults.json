@@ -29,6 +29,9 @@
     }, {
       "file": "plugins/foodnetwork.grr",
       "priority": 10
+    }, {
+      "file": "plugins/gourmet.grr",
+      "priority": 10
     }
   ]
 }

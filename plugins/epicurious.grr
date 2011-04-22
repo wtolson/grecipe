@@ -41,8 +41,8 @@
   },
 
   getYield: function() {
-    var yield = $('.hrecipe .yield').first();
-    return (yield.size()) ? yield.text().reduce() : undefined;
+    var y = $('.hrecipe .yield').first();
+    return (y.size()) ? y.text().reduce() : undefined;
   },
 
   getCookTime: function() {
