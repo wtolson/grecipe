@@ -28,7 +28,7 @@
 	},
   
 	getName: function() {
-		return $('.hrecipe .fn').first().text().trim();
+		return $('.hrecipe .fn').first().text().reduce();
 	},
 
   getPhoto: function() {
@@ -42,13 +42,13 @@
 
   getYield: function() {
     var yield = $('.hrecipe .yield').first();
-    return (yield.size()) ? yield.text().trim() : undefined;
+    return (yield.size()) ? yield.text().reduce() : undefined;
   },
 
   getCookTime: function() {
     var time = $('.hrecipe .cookTime').first();
     return (time.size()) ? {
-      "value": time.text().trim(),
+      "value": time.text().reduce(),
       "value-title": $(".value-title", time).attr("title")
     } : undefined;
   },
@@ -56,7 +56,7 @@
   getPrepTime: function() {
     var time = $('.hrecipe .prepTime').first();
     return (time.size()) ? {
-      "value": time.text().trim(),
+      "value": time.text().reduce(),
       "value-title": $(".value-title", time).attr("title")
     } : undefined;
   },
@@ -64,7 +64,7 @@
   getTotalTime: function() {
     var time = $('.hrecipe .duration').first();
     return (time.size()) ? {
-      "value": time.text().trim(),
+      "value": time.text().reduce(),
       "value-title": $(".value-title", time).attr("title")
     } : undefined;
   },
@@ -77,11 +77,11 @@
 
       
 		if(!introText || introText.length < 2) {
-      return $('#truncatedText').text().trim() ?
-        $('#truncatedText').html().trim() : undefined;
+      return $('#truncatedText').text().reduce() ?
+        $('#truncatedText').html().reduce() : undefined;
 		}
 
-		return (new Function("return " + introText[1].trim()))();
+		return (new Function("return " + introText[1]))().reduce();
 	},
   
 	getIngredients: function() {
@@ -89,7 +89,7 @@
     var sections = ingredients.children('.ingredientsList');
     sections = sections.map(function() {
       var title = $(this).prevUntil('.ingredientsList').filter('strong');
-      title = title.size() ? title.text().trim() : undefined;
+      title = title.size() ? title.text().reduce() : undefined;
 
       var ingredient = $(this).children('.ingredient').map(function() {
         return this.innerHTML;
@@ -114,7 +114,7 @@
           sections.push(section);
           section = {instruction: []};
         }
-        section.title = title.textContent.trim();
+        section.title = title.textContent.reduce();
         $(title).next('br').remove();
         $(title).remove();
       }
@@ -134,13 +134,13 @@
     closing = closing.get().filter(function(item) {
       return !item.textContent.empty();
     }).map(function(item) {
-      return item.outerHTML.trim();
+      return item.outerHTML.reduce();
     }).join("\n");
     return closing.empty() ? undefined : closing;
   },
   
   getAuthor: function() {
     var author = $('.hrecipe .author').first();
-    return (author.size()) ? author.text().trim() : undefined;
+    return (author.size()) ? author.text().reduce() : undefined;
   }
 }

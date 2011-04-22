@@ -28,7 +28,7 @@
 	},
   
 	getName: function() {
-		return $('.hrecipe .fn').first().text().trim();
+		return $('.hrecipe .fn').first().text().reduce();
 	},
   
   getPhoto: function() {
@@ -43,20 +43,20 @@
   getPublished: function() {
     var time = $('.hrecipe .published').first();
     return (time.size()) ? {
-      "value": time.text().trim(),
+      "value": time.text().reduce(),
       "value-title": $(".value-title", time).attr("title")
     } : undefined;
   },
   
   getSummary: function() {
     var summary = $('.hrecipe .summary');
-    return (summary.size()) ? summary.html().trim() : undefined;
+    return (summary.size()) ? summary.html().reduce() : undefined;
   },
   
   getCookTime: function() {
     var time = $('.hrecipe .cookTime').first();
     return (time.size()) ? {
-      "value": time.text().trim(),
+      "value": time.text().reduce(),
       "value-title": $(".value-title", time).attr("title")
     } : undefined;
   },
@@ -64,7 +64,7 @@
   getPrepTime: function() {
     var time = $('.hrecipe .prepTime').first();
     return (time.size()) ? {
-      "value": time.text().trim(),
+      "value": time.text().reduce(),
       "value-title": $(".value-title", time).attr("title")
     } : undefined;
   },
@@ -72,7 +72,7 @@
   getTotalTime: function() {
     var time = $('.hrecipe .duration').first();
     return (time.size()) ? {
-      "value": time.text().trim(),
+      "value": time.text().reduce(),
       "value-title": $(".value-title", time).attr("title")
     } : undefined;
   },
@@ -94,7 +94,7 @@
     }
     
     instructions = temp.map(function() {
-      return this.textContent.trim();
+      return this.textContent.reduce();
     }).get().filter(function(item) {
       return !item.empty();
     });
@@ -104,7 +104,7 @@
   
   getYield: function() { // yeild is a reserved word!!!
     var y = $('.hrecipe .yield').first();
-    return (y.size()) ? y.text().trim() : undefined;
+    return (y.size()) ? y.text().reduce() : undefined;
   },
   
   getIngredients: function() {
@@ -123,7 +123,7 @@
     if (!temp.size()) {return undefined;}
 
     var ingredients = temp.map(function() {
-      return this.textContent.trim();
+      return this.textContent.reduce();
     }).get().filter(function(item) {
       return !item.empty();
     });
@@ -135,6 +135,6 @@
   
   getAuthor: function() {
     var author = $('.hrecipe .author').first();
-    return (author.size()) ? author.text().trim() : undefined;
+    return (author.size()) ? author.text().reduce() : undefined;
   }
 }

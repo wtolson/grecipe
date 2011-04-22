@@ -27,12 +27,12 @@
 	},
 
   getName: function() {
-		return $('.fn').first().text().trim();
+		return $('.fn').first().text().reduce();
 	},
 
   getAuthor: function() {
     var author = $('.author').first();
-    return (author.size()) ? author.text().trim() : undefined;
+    return (author.size()) ? author.text().reduce() : undefined;
   },
 
   getPhoto: function() {
@@ -52,7 +52,7 @@
   getCookTime: function() {
     var time = $('.cookTime').first();
     return (time.size()) ? {
-      "value": time.next().text().trim(),
+      "value": time.next().text().reduce(),
       "value-title": $(".value-title", time).attr("title")
     } : undefined;
   },
@@ -60,7 +60,7 @@
   getPrepTime: function() {
     var time = $('.prepTime').first();
     return (time.size()) ? {
-      "value": time.next().text().trim(),
+      "value": time.next().text().reduce(),
       "value-title": $(".value-title", time).attr("title")
     } : undefined;
   },
@@ -68,7 +68,7 @@
   getTotalTime: function() {
     var time = $('.totalTime').first();
     return (time.size()) ? {
-      "value": time.next().text().trim(),
+      "value": time.next().text().reduce(),
       "value-title": $(".value-title", time).attr("title")
     } : undefined;
   },
@@ -79,7 +79,7 @@
     if (!ingredients.size()) {return undefined;}
 
     ingredients = ingredients.map(function() {
-      return this.textContent.trim();
+      return this.textContent.reduce();
     }).get().filter(function(item) {
       return !item.empty();
     });
@@ -94,7 +94,7 @@
     if (!instructions.size()) {return undefined;};
     
     instructions = instructions.map(function() {
-      return this.textContent.trim();
+      return this.textContent.reduce();
     }).get().filter(function(item) {
       return !item.empty();
     });
@@ -104,6 +104,6 @@
 
   getYield: function() { // yeild is a reserved word!!!
     var y = $('.yield').first();
-    return (y.size()) ? y.text().trim() : undefined;
+    return (y.size()) ? y.text().reduce() : undefined;
   }
 }
