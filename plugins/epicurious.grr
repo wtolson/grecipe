@@ -86,24 +86,17 @@
   
 	getIngredients: function() {
 		var ingredients = $('#ingredients');
-    var sectionTitles = ingredients.children('strong');
-    var sections = [];
-    var ingredient;
-    if (sectionTitles.size()) {
-      sectionTitles.each(function() {
-        ingredient = [];
-        $(this).next('.ingredientsList').children('.ingredient').each(function() {
-          ingredient.push(this.innerHTML);
-        });
-        sections.push({title: this.textContent.trim(), ingredient: ingredient});
-      });
-    } else {
-      ingredient = [];
-      ingredients.children('.ingredientsList').children('.ingredient').each(function() {
-          ingredient.push(this.innerHTML);
-      });
-      sections.push({ingredient: ingredient});
-    }
+    var sections = ingredients.children('.ingredientsList');
+    sections = sections.map(function() {
+      var title = $(this).prevUntil('.ingredientsList').filter('strong');
+      title = title.size() ? title.text().trim() : undefined;
+
+      var ingredient = $(this).children('.ingredient').map(function() {
+        return this.innerHTML;
+      }).get().filter(function(item) {return !item.empty();});
+
+      return {title: title, ingredient: ingredient};
+    }).get().filter(function(section) {return !!section.ingredient;});
 		
 		return sections ? {section: sections} : undefined;
 	},
@@ -133,10 +126,17 @@
 	},
 
   getClosing: function() {
-    var closing = $('#chefNotes').clone();
+    var closing = $('#chefNotes').nextUntil('#addnoteLnk').andSelf().clone();
+    if (!closing.size()) { return undefined };
+
     closing.remove('#addnoteLnk');
-    closing = closing.text().trim();
-    return closing ? closing : undefined;
+
+    closing = closing.get().filter(function(item) {
+      return !item.textContent.empty();
+    }).map(function(item) {
+      return item.outerHTML.trim();
+    }).join("\n");
+    return closing.empty() ? undefined : closing;
   },
   
   getAuthor: function() {
