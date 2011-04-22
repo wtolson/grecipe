@@ -91,7 +91,7 @@ function constructAtomXml_(docTitle, docType, opt_starred) {
               '<category scheme="http://schemas.google.com/g/2005#kind"', 
               ' term="http://schemas.google.com/docs/2007#', docType, '"/>',
               starred ? starCat : '',
-              '<title>', docTitle, '</title>',
+              '<title>', htmlspecialchars_(docTitle), '</title>',
               '</entry>'].join('');
   return atom;
 };
@@ -116,6 +116,11 @@ function constructContentBody_(title, docType, body, contentType, opt_starred) {
               body, '\r\n',
               '--END_OF_PART--\r\n'].join('');
   return body;
+};
+
+function htmlspecialchars_(string) {
+  return string.toString().replace(/&/g, '&amp;').replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;').replace(/'/g, '&#039;').replace(/"/g, '&quot;');
 };
 
 window.gdocs = gdocs;

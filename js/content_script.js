@@ -168,7 +168,13 @@ port.onMessage.addListener(onMessage_);
 var blank_;
 String.prototype.empty = function() {
   blank_ = blank_ || /^\s*$/;
-  return blank_.test(this);
+  return blank_.test(this.toString());
+};
+
+var white_;
+String.prototype.reduce = function() {
+  white_ = white_ || /\s+/g;
+  return this.toString().replace(white_, ' ').trim();
 };
 
 })(this, this.chrome);
