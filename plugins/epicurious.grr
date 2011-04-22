@@ -21,7 +21,7 @@
 	"name": "Epicurious",
 	"author": "William T. Olson",
 	"version": 1.0,
-	"url": "http://www.epicurious.com/*",
+	"url": "http*://www.epicurious.com/*",
 	
 	hasRecipe: function() {
 		return !!$('.hrecipe').size();
