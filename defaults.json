@@ -15,6 +15,9 @@
       "file": "plugins/bbcgoodfood.grr",
       "priority": 10
     }, {
+      "file": "plugins/chow.grr",
+      "priority": 10
+    }, {
       "file": "plugins/epicurious.grr",
       "priority": 10
     }
