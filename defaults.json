@@ -20,6 +20,12 @@
     }, {
       "file": "plugins/epicurious.grr",
       "priority": 10
+    }, {
+      "file": "plugins/food.grr",
+      "priority": 10
+    }, {
+      "file": "plugins/foodandwine.grr",
+      "priority": 10
     }
   ]
 }
