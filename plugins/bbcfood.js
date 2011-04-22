@@ -16,7 +16,7 @@
  *     along with gRecipes.  If not, see <http://www.gnu.org/licenses/>.
  * 
  **********************************************************************/
-
+// This has become http://recipes.bbclifestyle.com/
 
 function getTitle() {
     return $('h1', $('#column-1')).first().text().trim();
