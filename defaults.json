@@ -9,6 +9,9 @@
       "file": "plugins/hrecipe.grr",
       "priority": 100
     }, {
+      "file": "plugins/allrecipes.grr",
+      "priority": 10
+    }, {
       "file": "plugins/epicurious.grr",
       "priority": 10
     }
