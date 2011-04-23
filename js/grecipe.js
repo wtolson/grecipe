@@ -107,7 +107,7 @@ var grecipe = {
   },
 
   get settings() {
-    return settings_;
+    return settings_ || defaults_.settings;
   }
 };
 
@@ -125,30 +125,6 @@ function storage_(key, opt_value) {
     localStorage[key] = JSON.stringify(opt_value);
   }
 };
-
-settings_  = (function() {
-  function get_(key) {
-    return storage_("grecipe."+key);
-  };
-
-  function set_(key, value) {
-    log_("Set %s to", key, value);
-    return storage_("grecipe."+key, value);
-  };
-
-  function createproperty_(obj, key) {
-    obj.__defineGetter__(key, get_.bind(null, key));
-    obj.__defineSetter__(key, set_.bind(null, key));
-  };
-
-  var settings = {};
-  for (property in defaults_.settings) {
-    createproperty_(settings, property);
-  }
-
-  Object.freeze(settings);
-  return settings;
-})();
 
 function onConnect_(port) {
   console.assert(port.name == "grecipe");
@@ -218,6 +194,7 @@ function setup_(manifest, defaults) {
   persistence.store.websql.config(persistence, 'grecipe', '', 5 * 1024 * 1024);
 
   grecipe.Grr = Grr = initGrr_();
+  settings_ = initSettings_();
 
   update_();
   chrome.extension.onConnect.addListener(onConnect_);
@@ -250,6 +227,30 @@ function update_() {
 
     settings_.version = manifest_.version;
   }
+};
+
+function initSettings_() {
+  function get_(key) {
+    return storage_("grecipe."+key);
+  };
+
+  function set_(key, value) {
+    log_("Set %s to", key, value);
+    return storage_("grecipe."+key, value);
+  };
+
+  function createproperty_(obj, key) {
+    obj.__defineGetter__(key, get_.bind(null, key));
+    obj.__defineSetter__(key, set_.bind(null, key));
+  };
+
+  var settings = {};
+  for (property in defaults_.settings) {
+    createproperty_(settings, property);
+  }
+
+  Object.freeze(settings);
+  return settings;
 };
 
 function initGrr_() {
