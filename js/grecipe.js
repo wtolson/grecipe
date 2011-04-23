@@ -189,12 +189,13 @@ function setup_(manifest, defaults) {
   defaults_ = defaults[0];
   Object.freeze(manifest_);
   Object.freeze(defaults_);
+  
+  settings_ = initSettings_();
 
   persistence.debug = grecipe.settings.debug;
   persistence.store.websql.config(persistence, 'grecipe', '', 5 * 1024 * 1024);
 
   grecipe.Grr = Grr = initGrr_();
-  settings_ = initSettings_();
 
   update_();
   chrome.extension.onConnect.addListener(onConnect_);
@@ -231,7 +232,9 @@ function update_() {
 
 function initSettings_() {
   function get_(key) {
-    return storage_("grecipe."+key);
+    var value = storage_("grecipe."+key);
+    if (value == undefined) value = defaults_.settings[key];
+    return value;
   };
 
   function set_(key, value) {
