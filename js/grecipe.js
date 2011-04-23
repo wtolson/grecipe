@@ -191,13 +191,13 @@ function setup_(manifest, defaults) {
   Object.freeze(defaults_);
   
   settings_ = initSettings_();
-
   persistence.debug = grecipe.settings.debug;
   persistence.store.websql.config(persistence, 'grecipe', '', 5 * 1024 * 1024);
 
   grecipe.Grr = Grr = initGrr_();
 
   update_();
+  grecipe.setDefaults(); //For development only.
   chrome.extension.onConnect.addListener(onConnect_);
 
   loaded_.resolve();
@@ -211,7 +211,7 @@ function update_() {
     if (localStorage["sendAnalytics"] || localStorage["openOnSave"]) {
       oldVersion = "1.8.1";
     } else {
-      oldVersion = settings_.version = manifest_.version;
+      oldVersion = manifest_.version;
       grecipe.setDefaults();
     }
   }
@@ -251,6 +251,7 @@ function initSettings_() {
   for (property in defaults_.settings) {
     createproperty_(settings, property);
   }
+  createproperty_(settings, "version");
 
   Object.freeze(settings);
   return settings;
