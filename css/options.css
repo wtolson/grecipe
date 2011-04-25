@@ -43,7 +43,7 @@ h3
 #logo
 {
   float:right;
-  background-image:url(/img/grecipe-128.png);
+  margin: 10px;
   width:128px;
   height:128px;
 }
