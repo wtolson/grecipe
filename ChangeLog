@@ -46,3 +46,8 @@ William Olson <wtolson@gmail.com>
 
 * 1.8.1 11/09/2010
  -Formating update for Food Network.
+
+* 1.9 04/25/2011
+ -New grr format for plugins.
+ -Support for hRecipe format.
+ -Begginings of document templating support.
