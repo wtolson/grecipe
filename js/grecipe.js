@@ -197,7 +197,7 @@ function setup_(manifest, defaults) {
   grecipe.Grr = Grr = initGrr_();
 
   update_();
-  grecipe.setDefaults(); //For development only.
+  //grecipe.setDefaults(); //For development only.
   chrome.extension.onConnect.addListener(onConnect_);
 
   loaded_.resolve();
