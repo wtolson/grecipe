@@ -2,7 +2,6 @@
   "name": "gRecipes",
   "version": "1.9",
   "icons": {
-    "48": "img/grecipe-48.png",
     "128": "img/grecipe-128.png"
   },
   "description": "Import recipes to google docs.",
