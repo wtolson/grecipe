@@ -220,9 +220,9 @@ function update_() {
     // Handle update
     if (oldVersion < "1.8.2") {
       grecipe.setDefaults();
-      settings_.sendanalytics = localStorage["sendAnalytics"];
+      settings_.sendanalytics = JSON.parse(localStorage["sendAnalytics"]);
       localStorage.removeItem("sendAnalytics");
-      settings_.openonsave = localStorage["openOnSave"];
+      settings_.openonsave = JSON.parse(localStorage["openOnSave"]);
       localStorage.removeItem("openOnSave");
     }
 
