@@ -32,6 +32,13 @@ function on_opt_sendanalytics_click(event) {
   grecipe.settings.sendanalytics = event.target.checked;
 };
 
+function on_reset_defaults_click(event) {
+  if(confirm("Reset gRecipe Defaults?")) {
+    grecipe.setDefaults();
+    initUI();
+  }
+};
+
 function initUI() {
   $('#revoke_button').attr("disabled", !grecipe.hasAuth());
   $('#opt_openonsave').attr("checked", grecipe.settings.openonsave);
@@ -43,6 +50,8 @@ $(function() {
   $("#revoke_button").click(on_revoke_button_click);
   $("#opt_openonsave").click(on_opt_openonsave_click);
   $("#opt_sendanalytics").click(on_opt_sendanalytics_click);
+  $("#reset_defaults").click(on_reset_defaults_click);
+  
 });
 
 })(window, chrome.extension.getBackgroundPage().grecipe, jQuery);
