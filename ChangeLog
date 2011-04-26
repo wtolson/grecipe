@@ -51,3 +51,9 @@ William Olson <wtolson@gmail.com>
  -New grr format for plugins.
  -Support for hRecipe format.
  -Begginings of document templating support.
+
+* 1.9.1 04/25/2011
+ -Bug fixed where old settings arn't parsed before updating.
+
+* 1.9.2 04/26/2011
+ -Fixed bug where grrs are not saved if a new tab isn't opened after update.
