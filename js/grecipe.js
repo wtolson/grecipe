@@ -39,16 +39,7 @@ var grecipe = {
       settings_[setting] = defaults_.settings[setting];
     }
 
-    var allGrrs = Grr.all();
-    allGrrs.destroyAll(function() {
-      defaults_.grrs.forEach(function(g) {
-        Grr.fromUrl(g.file, {
-          "priority": g.priority
-        }).then(function(grr) {
-          persistence.add(grr);
-        });
-      });
-    });
+    resetGrrs_();
 
     $.ajax("templates/default.html").then(function(template) {
       storage_("template", template);
@@ -226,6 +217,10 @@ function update_() {
       localStorage.removeItem("openOnSave");
     }
 
+    if (oldVersion == "1.9" || oldVersion == "1.9.1") {
+      resetGrrs_();
+    }
+
     settings_.version = manifest_.version;
   }
 };
@@ -310,6 +305,25 @@ function initGrr_() {
   persistence.schemaSync();
 
   return Grr;
+};
+
+function resetGrrs_() {
+  Grr.all().destroyAll(function() {
+    var grrsAdded = defaults_.grrs.map(function(g) {
+      return Grr.fromUrl(g.file, {
+        "priority": g.priority
+      }).then(function(grr) {
+        persistence.add(grr);
+      });
+    });
+    whenAll_(grrsAdded).then(function() {
+      persistence.flush();
+    });
+  });
+};
+
+function whenAll_(array) {
+  return Function.call.apply($.when, array);
 };
 
 $.when($.getJSON('manifest.json'), $.getJSON('defaults.json')).then(setup_);
